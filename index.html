@@ -74,6 +74,7 @@
   <p><b>Padrão Fiscalização</b></p>
 </header>
 
+<!-- MENU -->
 <button class="btn" type="button" onclick="abrir('nr35')">
 📋 NR35 – Checklist
 </button>
@@ -86,11 +87,94 @@
 📂 Histórico
 </button>
 
-
+<!-- NR35 -->
 <section id="nr35">
   <h2>Checklist NR35</h2>
 
   <label><input type="checkbox" id="c1"> Treinamento NR35 válido</label>
   <label><input type="checkbox" id="c2"> EPIs inspecionados</label>
   <label><input type="checkbox" id="c3"> Linha de vida instalada</label>
-  <label><input type="checkbox" id="c4"> Ancorag
+  <label><input type="checkbox" id="c4"> Ancoragem certificada</label>
+  <label><input type="checkbox" id="c5"> Área sinalizada</label>
+
+  <h3>Observações</h3>
+  <textarea id="obs"></textarea>
+
+  <button class="btn save" onclick="salvarNR35()">💾 Salvar NR35</button>
+</section>
+
+<!-- APR -->
+<section id="apr">
+  <h2>APR – Análise Preliminar de Risco</h2>
+  <textarea id="aprtexto" placeholder="Descreva os riscos e medidas de controle..."></textarea>
+
+  <button class="btn save" onclick="salvarAPR()">💾 Salvar APR</button>
+</section>
+
+<!-- HISTÓRICO -->
+<section id="historico">
+  <h2>Histórico de Registros</h2>
+  <div id="lista"></div>
+</section>
+
+<!-- FUNÇÕES -->
+<script>
+  function abrir(id) {
+    document.querySelectorAll("section").forEach(sec => {
+      sec.style.display = "none";
+    });
+
+    let alvo = document.getElementById(id);
+    if (alvo) {
+      alvo.style.display = "block";
+      alvo.scrollIntoView({ behavior: "smooth" });
+    }
+
+    if (id === "historico") {
+      carregarHistorico();
+    }
+  }
+
+  function salvarNR35() {
+    let registro = {
+      tipo: "NR35",
+      data: new Date().toLocaleString(),
+      obs: document.getElementById("obs").value
+    };
+
+    let dados = JSON.parse(localStorage.getItem("sst") || "[]");
+    dados.push(registro);
+    localStorage.setItem("sst", JSON.stringify(dados));
+
+    alert("✅ Registro NR35 salvo com sucesso!");
+  }
+
+  function salvarAPR() {
+    let registro = {
+      tipo: "APR",
+      data: new Date().toLocaleString(),
+      texto: document.getElementById("aprtexto").value
+    };
+
+    let dados = JSON.parse(localStorage.getItem("sst") || "[]");
+    dados.push(registro);
+    localStorage.setItem("sst", JSON.stringify(dados));
+
+    alert("✅ APR salva com sucesso!");
+  }
+
+  function carregarHistorico() {
+    let dados = JSON.parse(localStorage.getItem("sst") || "[]");
+    let html = "";
+
+    dados.forEach(r => {
+      html += `<p><b>${r.tipo}</b> – ${r.data}</p>`;
+    });
+
+    document.getElementById("lista").innerHTML =
+      html || "<p>Nenhum registro salvo ainda.</p>";
+  }
+</script>
+
+</body>
+</html>
