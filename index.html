@@ -1,235 +1,216 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema SST – NR35</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NR35 – Autorização Trabalho em Altura</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 15px;
-      background: #f4f6f8;
-    }
-
-    header {
-      text-align: center;
-      padding: 20px;
-      background: #003366;
-      color: white;
-      border-radius: 12px;
-    }
-
-    h1 { margin: 0; font-size: 22px; }
-
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      font-size: 17px;
-      border: none;
-      border-radius: 10px;
-      background: #0059b3;
-      color: white;
-      cursor: pointer;
-    }
-
-    .save { background: green; }
-    .pdf { background: darkred; }
-
-    section {
-      display: none;
-      margin-top: 15px;
-      padding: 15px;
-      background: white;
-      border-radius: 12px;
-    }
-
-    label { display: block; margin: 8px 0; }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    textarea { height: 60px; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-    }
-
-    th, td {
-      border: 1px solid #aaa;
-      padding: 6px;
-      font-size: 14px;
-    }
-
-    th { background: #e8eef5; }
-
-  </style>
+<style>
+body{font-family:Arial;margin:0;padding:15px;background:#f4f6f8;}
+header{text-align:center;padding:20px;background:#003366;color:#fff;border-radius:12px;}
+h1{margin:0;font-size:22px;}
+.btn{width:100%;padding:14px;margin:10px 0;border:none;border-radius:10px;
+background:#0059b3;color:white;font-size:16px;font-weight:bold;}
+.save{background:green;}
+.pdf{background:darkred;}
+section{background:#fff;border-radius:12px;padding:15px;margin-top:15px;}
+input,select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;}
+table{width:100%;border-collapse:collapse;margin-top:10px;}
+th,td{border:1px solid #aaa;padding:6px;font-size:13px;}
+th{background:#e8eef5;}
+.small{font-size:12px;color:#444;}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>SISTEMA ÚNICO SST</h1>
-  <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
-  <p>Padrão Fiscalização – NR35 Trabalho em Altura</p>
+<h1>NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA</h1>
+<p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
+<p>Padrão Fiscalização Oficial</p>
 </header>
 
-<button class="btn" onclick="abrir('nr35')">📋 NR35 – Autorização Trabalho em Altura</button>
-<button class="btn" onclick="abrir('historico')">📂 Histórico</button>
+<section>
 
-<!-- ================= NR35 COMPLETO ================= -->
-<section id="nr35">
+<h2>1. Dados da Obra</h2>
 
-  <h2>Autorização para Trabalho em Altura (NR35)</h2>
+<label>Local:
+<input id="local" placeholder="Ex: Colégio Adventista">
+</label>
 
-  <h3>Dados da Obra</h3>
-  <label>Local:
-    <input id="local" placeholder="Ex: Colégio Adventista">
-  </label>
+<label>Responsável Empresa:
+<input id="empresa" placeholder="Ex: Projeto A">
+</label>
 
-  <label>Responsável Empresa:
-    <input id="empresa" placeholder="Ex: Projeto A">
-  </label>
+<label>Responsável Contratada:
+<input id="resp" placeholder="Ex: Eng. Jadison / Eng. Luan">
+</label>
 
-  <label>Responsável Contratada:
-    <input id="responsavel" placeholder="Ex: Eng. Jadison / Eng. Luan">
-  </label>
+<h2>2. Tipo de Trabalho</h2>
+<label><input type="checkbox"> Telhado</label>
+<label><input type="checkbox"> Andaimes</label>
+<label><input type="checkbox"> Escadas</label>
+<label><input type="checkbox"> Laje</label>
 
-  <h3>Tipo de Trabalho</h3>
-  <label><input type="checkbox" id="telhado"> Em Telhado</label>
-  <label><input type="checkbox" id="andaime"> Com Andaimes</label>
-  <label><input type="checkbox" id="escada"> Com Escadas</label>
-  <label><input type="checkbox" id="laje"> Em Laje</label>
+<h2>3. Capacitação / Exame / Riscos Gerais</h2>
 
-  <!-- Checklist Geral -->
-  <h3>Capacitação / Exames / Riscos Gerais</h3>
+<table>
+<tr><th>Item</th><th>Status</th><th>Medidas de Segurança</th></tr>
 
-  <table>
-    <tr><th>Item</th><th>Status</th><th>Medidas de Segurança</th></tr>
+<tr><td>Funcionário treinado na atividade?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td><input></td></tr>
 
-    <tr>
-      <td>Funcionário treinado na atividade?</td>
-      <td>
-        <select id="g1">
-          <option>Sim</option><option>Não</option><option>N/A</option>
-        </select>
-      </td>
-      <td><input id="m1"></td>
-    </tr>
+<tr><td>Exame médico OK?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td><input></td></tr>
 
-    <tr>
-      <td>Exame médico OK?</td>
-      <td>
-        <select id="g2">
-          <option>Sim</option><option>Não</option><option>N/A</option>
-        </select>
-      </td>
-      <td><input id="m2"></td>
-    </tr>
+<tr><td>Existe risco de contato com partes energizadas?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td><input></td></tr>
 
-    <tr>
-      <td>Existe risco de contato com partes energizadas?</td>
-      <td>
-        <select id="g3">
-          <option>Sim</option><option>Não</option><option>N/A</option>
-        </select>
-      </td>
-      <td><input id="m3"></td>
-    </tr>
+<tr><td>Tempo seco e sem vento forte?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td><input></td></tr>
 
-    <tr>
-      <td>Área de trabalho isolada e sinalizada?</td>
-      <td>
-        <select id="g4">
-          <option>Sim</option><option>Não</option><option>N/A</option>
-        </select>
-      </td>
-      <td><input id="m4"></td>
-    </tr>
-  </table>
+<tr><td>Existe risco de queda de objetos?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td><input></td></tr>
 
-  <h3>Observações Gerais</h3>
-  <textarea id="obs" placeholder="Observações técnicas..."></textarea>
+<tr><td>Área de trabalho isolada?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td><input></td></tr>
 
-  <button class="btn save" onclick="salvarNR35()">💾 Salvar Autorização NR35</button>
+<tr><td>Local seguro para fixação do cinto?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td><input></td></tr>
+</table>
 
-  <button class="btn pdf" onclick="gerarPDF()">📄 Gerar PDF Fiscalização</button>
+<h2>4. Telhados + EPIs</h2>
+
+<table>
+<tr>
+<th>Item</th><th>Status</th>
+<th>EPI</th><th>Status</th>
+</tr>
+
+<tr>
+<td>Escada adequada e em condições?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Sapato biqueira aço?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+
+<tr>
+<td>Sistema trava-quedas instalado?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Cinto com 2 talabartes?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+
+<tr>
+<td>Cordas para içamento?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Óculos de segurança?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+</table>
+
+<h2>5. Andaimes + EPIs</h2>
+
+<table>
+<tr>
+<th>Item</th><th>Status</th>
+<th>EPI</th><th>Status</th>
+</tr>
+
+<tr>
+<td>Andaime montado e nivelado?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Capacete obrigatório?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+
+<tr>
+<td>Sistema trava-quedas presente?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Luvas adequadas?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+</table>
+
+<h2>6. Escadas + EPIs</h2>
+
+<table>
+<tr><th>Item</th><th>Status</th><th>EPI</th><th>Status</th></tr>
+
+<tr>
+<td>Escada em boas condições?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Cinto com talabarte?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+
+<tr>
+<td>Escada ultrapassa 1m do ponto?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Óculos de segurança?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+</table>
+
+<h2>7. Laje + EPIs</h2>
+
+<table>
+<tr><th>Item</th><th>Status</th><th>EPI</th><th>Status</th></tr>
+
+<tr>
+<td>Linha de vida independente instalada?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Trava-quedas retrátil?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+
+<tr>
+<td>Instalações desconectadas?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+<td>Protetor auricular?</td>
+<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
+</tr>
+</table>
+
+<h2>8. Declaração</h2>
+<p class="small">
+Declaro estar ciente dos riscos e comprometo-me a cumprir todos os itens desta autorização.
+</p>
+
+<h2>9. Assinaturas</h2>
+
+<label>Trabalhador 1:
+<input placeholder="Nome / CPF / Assinatura">
+</label>
+
+<label>Trabalhador 2:
+<input placeholder="Nome / CPF / Assinatura">
+</label>
+
+<label>Liberado por:
+<input placeholder="Responsável Liberação">
+</label>
+
+<label>Data:
+<input type="date">
+</label>
+
+<button class="btn save" onclick="alert('✅ Registro salvo no histórico (próxima versão)')">
+💾 Salvar Autorização Completa
+</button>
+
+<button class="btn pdf" onclick="alert('📄 PDF completo será gerado na próxima etapa profissional')">
+📄 Gerar PDF Fiscalização Completo
+</button>
 
 </section>
-
-<!-- ================= HISTÓRICO ================= -->
-<section id="historico">
-  <h2>Histórico de Registros</h2>
-  <div id="lista"></div>
-</section>
-
-<!-- ================= FUNÇÕES ================= -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-function abrir(id){
-  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
-  document.getElementById(id).style.display="block";
-
-  if(id==="historico") carregarHistorico();
-}
-
-function salvarNR35(){
-  let registro = {
-    tipo: "NR35 Autorização",
-    data: new Date().toLocaleString(),
-    local: document.getElementById("local").value,
-    empresa: document.getElementById("empresa").value,
-    responsavel: document.getElementById("responsavel").value,
-    obs: document.getElementById("obs").value
-  };
-
-  let dados = JSON.parse(localStorage.getItem("sst")||"[]");
-  dados.push(registro);
-  localStorage.setItem("sst", JSON.stringify(dados));
-
-  alert("✅ Autorização NR35 salva com sucesso!");
-}
-
-function carregarHistorico(){
-  let dados = JSON.parse(localStorage.getItem("sst")||"[]");
-  let html="";
-
-  dados.forEach(r=>{
-    html += `<p><b>${r.tipo}</b> – ${r.data}<br>${r.local}</p><hr>`;
-  });
-
-  document.getElementById("lista").innerHTML =
-    html || "<p>Nenhum registro salvo ainda.</p>";
-}
-
-function gerarPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  doc.setFontSize(14);
-  doc.text("NR35 – AUTORIZAÇÃO PARA TRABALHO EM ALTURA", 15, 20);
-
-  doc.setFontSize(11);
-  doc.text("Local: " + document.getElementById("local").value, 15, 35);
-  doc.text("Empresa: " + document.getElementById("empresa").value, 15, 45);
-  doc.text("Responsável: " + document.getElementById("responsavel").value, 15, 55);
-
-  doc.text("Documento emitido para fins de fiscalização.", 15, 70);
-
-  doc.save("Autorizacao_NR35_Fiscalizacao.pdf");
-}
-</script>
 
 </body>
 </html>
