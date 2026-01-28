@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Único SST</title>
+  <title>Sistema SST – NR35</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
       background: #f4f6f8;
     }
 
@@ -21,17 +21,14 @@
       border-radius: 12px;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+    h1 { margin: 0; font-size: 22px; }
 
     .btn {
       display: block;
       width: 100%;
-      padding: 15px;
-      margin: 12px 0;
-      font-size: 18px;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 17px;
       border: none;
       border-radius: 10px;
       background: #0059b3;
@@ -39,143 +36,199 @@
       cursor: pointer;
     }
 
+    .save { background: green; }
+    .pdf { background: darkred; }
+
     section {
       display: none;
-      margin-top: 20px;
+      margin-top: 15px;
       padding: 15px;
       background: white;
       border-radius: 12px;
     }
 
-    label {
-      display: block;
-      margin: 10px 0;
-    }
+    label { display: block; margin: 8px 0; }
 
-    textarea {
+    input, textarea, select {
       width: 100%;
-      height: 80px;
+      padding: 8px;
+      margin-top: 4px;
       border-radius: 8px;
-      padding: 10px;
       border: 1px solid #ccc;
     }
 
-    .save {
-      background: green;
+    textarea { height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
     }
+
+    th, td {
+      border: 1px solid #aaa;
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    th { background: #e8eef5; }
+
   </style>
 </head>
 
 <body>
 
 <header>
-  <h1>Sistema Único de SST</h1>
-  <p>FREIBERGER & FERNANDES – Soluções em Engenharia</p>
-  <p><b>Padrão Fiscalização</b></p>
+  <h1>SISTEMA ÚNICO SST</h1>
+  <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
+  <p>Padrão Fiscalização – NR35 Trabalho em Altura</p>
 </header>
 
-<!-- MENU -->
-<button class="btn" type="button" onclick="abrir('nr35')">
-📋 NR35 – Checklist
-</button>
+<button class="btn" onclick="abrir('nr35')">📋 NR35 – Autorização Trabalho em Altura</button>
+<button class="btn" onclick="abrir('historico')">📂 Histórico</button>
 
-<button class="btn" type="button" onclick="abrir('apr')">
-⚠️ APR – Análise de Risco
-</button>
-
-<button class="btn" type="button" onclick="abrir('historico')">
-📂 Histórico
-</button>
-
-<!-- NR35 -->
+<!-- ================= NR35 COMPLETO ================= -->
 <section id="nr35">
-  <h2>Checklist NR35</h2>
 
-  <label><input type="checkbox" id="c1"> Treinamento NR35 válido</label>
-  <label><input type="checkbox" id="c2"> EPIs inspecionados</label>
-  <label><input type="checkbox" id="c3"> Linha de vida instalada</label>
-  <label><input type="checkbox" id="c4"> Ancoragem certificada</label>
-  <label><input type="checkbox" id="c5"> Área sinalizada</label>
+  <h2>Autorização para Trabalho em Altura (NR35)</h2>
 
-  <h3>Observações</h3>
-  <textarea id="obs"></textarea>
+  <h3>Dados da Obra</h3>
+  <label>Local:
+    <input id="local" placeholder="Ex: Colégio Adventista">
+  </label>
 
-  <button class="btn save" onclick="salvarNR35()">💾 Salvar NR35</button>
+  <label>Responsável Empresa:
+    <input id="empresa" placeholder="Ex: Projeto A">
+  </label>
+
+  <label>Responsável Contratada:
+    <input id="responsavel" placeholder="Ex: Eng. Jadison / Eng. Luan">
+  </label>
+
+  <h3>Tipo de Trabalho</h3>
+  <label><input type="checkbox" id="telhado"> Em Telhado</label>
+  <label><input type="checkbox" id="andaime"> Com Andaimes</label>
+  <label><input type="checkbox" id="escada"> Com Escadas</label>
+  <label><input type="checkbox" id="laje"> Em Laje</label>
+
+  <!-- Checklist Geral -->
+  <h3>Capacitação / Exames / Riscos Gerais</h3>
+
+  <table>
+    <tr><th>Item</th><th>Status</th><th>Medidas de Segurança</th></tr>
+
+    <tr>
+      <td>Funcionário treinado na atividade?</td>
+      <td>
+        <select id="g1">
+          <option>Sim</option><option>Não</option><option>N/A</option>
+        </select>
+      </td>
+      <td><input id="m1"></td>
+    </tr>
+
+    <tr>
+      <td>Exame médico OK?</td>
+      <td>
+        <select id="g2">
+          <option>Sim</option><option>Não</option><option>N/A</option>
+        </select>
+      </td>
+      <td><input id="m2"></td>
+    </tr>
+
+    <tr>
+      <td>Existe risco de contato com partes energizadas?</td>
+      <td>
+        <select id="g3">
+          <option>Sim</option><option>Não</option><option>N/A</option>
+        </select>
+      </td>
+      <td><input id="m3"></td>
+    </tr>
+
+    <tr>
+      <td>Área de trabalho isolada e sinalizada?</td>
+      <td>
+        <select id="g4">
+          <option>Sim</option><option>Não</option><option>N/A</option>
+        </select>
+      </td>
+      <td><input id="m4"></td>
+    </tr>
+  </table>
+
+  <h3>Observações Gerais</h3>
+  <textarea id="obs" placeholder="Observações técnicas..."></textarea>
+
+  <button class="btn save" onclick="salvarNR35()">💾 Salvar Autorização NR35</button>
+
+  <button class="btn pdf" onclick="gerarPDF()">📄 Gerar PDF Fiscalização</button>
+
 </section>
 
-<!-- APR -->
-<section id="apr">
-  <h2>APR – Análise Preliminar de Risco</h2>
-  <textarea id="aprtexto" placeholder="Descreva os riscos e medidas de controle..."></textarea>
-
-  <button class="btn save" onclick="salvarAPR()">💾 Salvar APR</button>
-</section>
-
-<!-- HISTÓRICO -->
+<!-- ================= HISTÓRICO ================= -->
 <section id="historico">
   <h2>Histórico de Registros</h2>
   <div id="lista"></div>
 </section>
 
-<!-- FUNÇÕES -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- ================= FUNÇÕES ================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-  function abrir(id) {
-    document.querySelectorAll("section").forEach(sec => {
-      sec.style.display = "none";
-    });
+function abrir(id){
+  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
+  document.getElementById(id).style.display="block";
 
-    let alvo = document.getElementById(id);
-    if (alvo) {
-      alvo.style.display = "block";
-      alvo.scrollIntoView({ behavior: "smooth" });
-    }
+  if(id==="historico") carregarHistorico();
+}
 
-    if (id === "historico") {
-      carregarHistorico();
-    }
-  }
+function salvarNR35(){
+  let registro = {
+    tipo: "NR35 Autorização",
+    data: new Date().toLocaleString(),
+    local: document.getElementById("local").value,
+    empresa: document.getElementById("empresa").value,
+    responsavel: document.getElementById("responsavel").value,
+    obs: document.getElementById("obs").value
+  };
 
-  function salvarNR35() {
-    let registro = {
-      tipo: "NR35",
-      data: new Date().toLocaleString(),
-      obs: document.getElementById("obs").value
-    };
+  let dados = JSON.parse(localStorage.getItem("sst")||"[]");
+  dados.push(registro);
+  localStorage.setItem("sst", JSON.stringify(dados));
 
-    let dados = JSON.parse(localStorage.getItem("sst") || "[]");
-    dados.push(registro);
-    localStorage.setItem("sst", JSON.stringify(dados));
+  alert("✅ Autorização NR35 salva com sucesso!");
+}
 
-    alert("✅ Registro NR35 salvo com sucesso!");
-  }
+function carregarHistorico(){
+  let dados = JSON.parse(localStorage.getItem("sst")||"[]");
+  let html="";
 
-  function salvarAPR() {
-    let registro = {
-      tipo: "APR",
-      data: new Date().toLocaleString(),
-      texto: document.getElementById("aprtexto").value
-    };
+  dados.forEach(r=>{
+    html += `<p><b>${r.tipo}</b> – ${r.data}<br>${r.local}</p><hr>`;
+  });
 
-    let dados = JSON.parse(localStorage.getItem("sst") || "[]");
-    dados.push(registro);
-    localStorage.setItem("sst", JSON.stringify(dados));
+  document.getElementById("lista").innerHTML =
+    html || "<p>Nenhum registro salvo ainda.</p>";
+}
 
-    alert("✅ APR salva com sucesso!");
-  }
+function gerarPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
 
-  function carregarHistorico() {
-    let dados = JSON.parse(localStorage.getItem("sst") || "[]");
-    let html = "";
+  doc.setFontSize(14);
+  doc.text("NR35 – AUTORIZAÇÃO PARA TRABALHO EM ALTURA", 15, 20);
 
-    dados.forEach(r => {
-      html += `<p><b>${r.tipo}</b> – ${r.data}</p>`;
-    });
+  doc.setFontSize(11);
+  doc.text("Local: " + document.getElementById("local").value, 15, 35);
+  doc.text("Empresa: " + document.getElementById("empresa").value, 15, 45);
+  doc.text("Responsável: " + document.getElementById("responsavel").value, 15, 55);
 
-    document.getElementById("lista").innerHTML =
-      html || "<p>Nenhum registro salvo ainda.</p>";
-  }
+  doc.text("Documento emitido para fins de fiscalização.", 15, 70);
+
+  doc.save("Autorizacao_NR35_Fiscalizacao.pdf");
+}
 </script>
 
 </body>
