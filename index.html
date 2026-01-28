@@ -184,15 +184,18 @@ th{background:#e8eef5;}
 Declaro estar ciente dos riscos e comprometo-me a cumprir todos os itens desta autorização.
 </p>
 
-<h2>9. Assinaturas</h2>
+<h2>9. Assinaturas dos Trabalhadores</h2>
 
-<label>Trabalhador 1:
-<input placeholder="Nome / CPF / Assinatura">
-</label>
+<p class="small">
+Assine diretamente na tela (padrão fiscalização NR35).
+</p>
 
-<label>Trabalhador 2:
-<input placeholder="Nome / CPF / Assinatura">
-</label>
+<div id="assinaturas"></div>
+
+<button class="btn" onclick="limparAssinaturas()">
+🧹 Limpar Todas Assinaturas
+</button>
+
 
 <label>Liberado por:
 <input placeholder="Responsável Liberação">
@@ -211,6 +214,70 @@ Declaro estar ciente dos riscos e comprometo-me a cumprir todos os itens desta a
 </button>
 
 </section>
+<script>
+/* ================================
+   GERAR 5 ASSINATURAS DIGITAIS
+================================ */
+let pads = [];
+
+function carregarAssinaturas() {
+  let html = "";
+
+  for (let i = 1; i <= 5; i++) {
+    html += `
+      <h3>Trabalhador ${i}</h3>
+
+      <label>Nome:</label>
+      <input id="nome${i}" placeholder="Nome completo">
+
+      <label>CPF:</label>
+      <input id="cpf${i}" placeholder="CPF">
+
+      <label>Assinatura Digital:</label>
+      <canvas id="canvas${i}" width="320" height="120"
+        style="border:1px solid #000; border-radius:8px; background:#fff;">
+      </canvas>
+
+      <button class="btn" style="background:gray;" onclick="limparCanvas(${i})">
+        Limpar Assinatura ${i}
+      </button>
+
+      <hr>
+    `;
+  }
+
+  document.getElementById("assinaturas").innerHTML = html;
+
+  // Criar SignaturePads
+  for (let i = 1; i <= 5; i++) {
+    let canvas = document.getElementById("canvas" + i);
+    pads[i] = new SignaturePad(canvas);
+  }
+}
+
+/* ================================
+   LIMPAR UMA ASSINATURA
+================================ */
+function limparCanvas(i) {
+  pads[i].clear();
+}
+
+/* ================================
+   LIMPAR TODAS
+================================ */
+function limparAssinaturas() {
+  for (let i = 1; i <= 5; i++) {
+    pads[i].clear();
+  }
+}
+
+/* ================================
+   AUTO CARREGAR AO ABRIR
+================================ */
+window.onload = function() {
+  carregarAssinaturas();
+};
+</script>
 
 </body>
 </html>
