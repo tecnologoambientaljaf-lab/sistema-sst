@@ -3,24 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NR35 – Autorização Trabalho em Altura</title>
+<title>Sistema Único SST</title>
 
-<!-- ✅ Biblioteca de Assinatura -->
+<!-- ✅ Biblioteca Assinatura -->
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
 <style>
 body{font-family:Arial;margin:0;padding:15px;background:#f4f6f8;}
 header{text-align:center;padding:20px;background:#003366;color:#fff;border-radius:12px;}
 h1{margin:0;font-size:22px;}
-section{background:#fff;border-radius:12px;padding:15px;margin-top:15px;}
-
-input,select,textarea{
-  width:100%;
-  padding:8px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  margin-top:4px;
-}
 
 .btn{
   width:100%;
@@ -35,7 +26,23 @@ input,select,textarea{
 }
 
 .save{background:green;}
-.small{font-size:12px;color:#444;}
+.gray{background:#666;}
+
+section{
+  display:none;
+  background:#fff;
+  border-radius:12px;
+  padding:15px;
+  margin-top:15px;
+}
+
+input,textarea,select{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-top:4px;
+}
 
 canvas{
   width:100%;
@@ -45,165 +52,209 @@ canvas{
   background:white;
   touch-action:none;
 }
+
+.small{font-size:12px;color:#444;}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA</h1>
+<h1>Sistema Único de SST</h1>
 <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
 <p>Padrão Fiscalização Oficial</p>
 </header>
 
-<section>
+<!-- ✅ MENU PRINCIPAL -->
+<section id="menu" style="display:block;">
+<h2>Menu Principal</h2>
 
-<h2>1. Dados da Obra</h2>
-
-<label>Local:
-<input id="local" placeholder="Ex: Colégio Adventista">
-</label>
-
-<label>Responsável Empresa:
-<input id="empresa" placeholder="Ex: Projeto A">
-</label>
-
-<label>Responsável Contratada:
-<input id="resp" placeholder="Ex: Eng. Jadison / Eng. Luan">
-</label>
-
-<hr>
-
-<h2>2. Declaração</h2>
-<p class="small">
-Declaro estar ciente dos riscos e comprometo-me a cumprir todos os itens desta autorização.
-</p>
-
-<hr>
-
-<h2>3. Assinaturas dos Trabalhadores (5)</h2>
-
-<div id="assinaturas"></div>
-
-<button class="btn" style="background:gray;" onclick="limparAssinaturas()">
-🧹 Limpar Todas Assinaturas
-</button>
-
-<hr>
-
-<label>Liberado por:
-<input id="liberado" placeholder="Responsável pela Liberação">
-</label>
-
-<label>Data:
-<input id="data" type="date">
-</label>
-
-<button class="btn save" onclick="salvarTudo()">
-💾 Salvar Autorização Completa
-</button>
+<button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
+<button class="btn" onclick="abrir('apr')">⚠️ APR – Análise Preliminar</button>
+<button class="btn" onclick="abrir('nr18')">🏗️ NR18 – Checklist Obra</button>
+<button class="btn" onclick="abrir('historico')">📂 Histórico</button>
 
 </section>
 
-<!-- ✅ SCRIPT ÚNICO LIMPO -->
+<!-- ✅ NR35 -->
+<section id="nr35">
+<h2>NR35 – Autorização Trabalho em Altura</h2>
+
+<label>Local:
+<input id="local">
+</label>
+
+<label>Responsável Empresa:
+<input id="empresa">
+</label>
+
+<label>Responsável Contratada:
+<input id="resp">
+</label>
+
+<hr>
+
+<h3>Assinaturas dos Trabalhadores (5)</h3>
+<div id="assinaturas"></div>
+
+<button class="btn gray" onclick="limparAssinaturas()">🧹 Limpar Assinaturas</button>
+
+<button class="btn save" onclick="salvarNR35()">💾 Salvar NR35</button>
+
+<button class="btn" onclick="abrir('menu')">⬅ Voltar ao Menu</button>
+</section>
+
+<!-- ✅ APR -->
+<section id="apr">
+<h2>APR – Análise Preliminar de Risco</h2>
+
+<textarea id="aprtexto" placeholder="Descreva riscos e medidas de controle..."></textarea>
+
+<button class="btn save" onclick="salvarAPR()">💾 Salvar APR</button>
+
+<button class="btn" onclick="abrir('menu')">⬅ Voltar ao Menu</button>
+</section>
+
+<!-- ✅ NR18 -->
+<section id="nr18">
+<h2>NR18 – Checklist Condições Gerais</h2>
+
+<label><input type="checkbox"> Guarda-corpo instalado</label>
+<label><input type="checkbox"> Linha de vida presente</label>
+<label><input type="checkbox"> Andaimes adequados</label>
+<label><input type="checkbox"> Sinalização completa</label>
+<label><input type="checkbox"> EPIs entregues e registrados</label>
+
+<button class="btn save" onclick="salvarNR18()">💾 Salvar NR18</button>
+
+<button class="btn" onclick="abrir('menu')">⬅ Voltar ao Menu</button>
+</section>
+
+<!-- ✅ HISTÓRICO -->
+<section id="historico">
+<h2>Histórico de Registros</h2>
+<div id="lista"></div>
+
+<button class="btn gray" onclick="limparHistorico()">🗑 Limpar Histórico</button>
+
+<button class="btn" onclick="abrir('menu')">⬅ Voltar ao Menu</button>
+</section>
+
+<!-- ✅ SCRIPT ÚNICO -->
 <script>
 let pads = [];
 
-/* ==========================
-   CRIAR 5 CAMPOS DE ASSINATURA
-========================== */
-function carregarAssinaturas(){
-  const container = document.getElementById("assinaturas");
-  container.innerHTML = "";
+/* =============================
+   NAVEGAÇÃO ENTRE TELAS
+============================= */
+function abrir(id){
+  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
+  document.getElementById(id).style.display="block";
 
-  pads = [];
+  if(id==="nr35"){
+    carregarAssinaturas();
+  }
+
+  if(id==="historico"){
+    carregarHistorico();
+  }
+}
+
+/* =============================
+   ASSINATURAS NR35
+============================= */
+function carregarAssinaturas(){
+  const container=document.getElementById("assinaturas");
+  container.innerHTML="";
+  pads=[];
 
   for(let i=1;i<=5;i++){
-
     container.innerHTML += `
-      <h3>Trabalhador ${i}</h3>
-
-      <label>Nome:</label>
-      <input id="nome${i}" placeholder="Nome completo">
-
-      <label>CPF:</label>
+      <h4>Trabalhador ${i}</h4>
+      <input id="nome${i}" placeholder="Nome">
       <input id="cpf${i}" placeholder="CPF">
-
-      <label>Assinatura Digital:</label>
       <canvas id="canvas${i}"></canvas>
-
-      <button class="btn" style="background:#666;" onclick="limparCanvas(${i})">
-        Limpar Assinatura ${i}
-      </button>
-
+      <button class="btn gray" onclick="limparCanvas(${i})">Limpar ${i}</button>
       <hr>
     `;
   }
 
   setTimeout(()=>{
     for(let i=1;i<=5;i++){
-      const canvas = document.getElementById("canvas"+i);
-
-      // Ajustar tamanho real
-      canvas.width = canvas.offsetWidth;
-      canvas.height = 160;
-
-      pads[i] = new SignaturePad(canvas);
+      let canvas=document.getElementById("canvas"+i);
+      canvas.width=canvas.offsetWidth;
+      canvas.height=160;
+      pads[i]=new SignaturePad(canvas);
     }
   },300);
 }
 
-/* ==========================
-   LIMPAR INDIVIDUAL
-========================== */
-function limparCanvas(i){
-  pads[i].clear();
-}
-
-/* ==========================
-   LIMPAR TODAS
-========================== */
+function limparCanvas(i){ pads[i].clear(); }
 function limparAssinaturas(){
-  for(let i=1;i<=5;i++){
-    pads[i].clear();
-  }
+  for(let i=1;i<=5;i++) pads[i].clear();
 }
 
-/* ==========================
-   SALVAR DADOS (LOCALSTORAGE)
-========================== */
-function salvarTudo(){
+/* =============================
+   SALVAR REGISTROS
+============================= */
+function salvarNR35(){
+  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
 
-  let trabalhadores = [];
+  dados.push({
+    tipo:"NR35",
+    data:new Date().toLocaleString(),
+    local:local.value,
+    empresa:empresa.value
+  });
 
-  for(let i=1;i<=5;i++){
-    trabalhadores.push({
-      nome: document.getElementById("nome"+i).value,
-      cpf: document.getElementById("cpf"+i).value,
-      assinatura: pads[i].isEmpty() ? "" : pads[i].toDataURL()
-    });
-  }
-
-  let registro = {
-    tipo: "NR35 Autorização",
-    datahora: new Date().toLocaleString(),
-    local: document.getElementById("local").value,
-    empresa: document.getElementById("empresa").value,
-    responsavel: document.getElementById("resp").value,
-    liberado: document.getElementById("liberado").value,
-    data: document.getElementById("data").value,
-    trabalhadores: trabalhadores
-  };
-
-  localStorage.setItem("nr35_registro", JSON.stringify(registro));
-
-  alert("✅ Autorização NR35 salva com assinaturas!");
+  localStorage.setItem("sst",JSON.stringify(dados));
+  alert("✅ NR35 salva!");
 }
 
-/* ==========================
-   AUTO-INICIAR AO ABRIR
-========================== */
-window.onload = carregarAssinaturas;
+function salvarAPR(){
+  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
+
+  dados.push({
+    tipo:"APR",
+    data:new Date().toLocaleString(),
+    texto:aprtexto.value
+  });
+
+  localStorage.setItem("sst",JSON.stringify(dados));
+  alert("✅ APR salva!");
+}
+
+function salvarNR18(){
+  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
+
+  dados.push({
+    tipo:"NR18",
+    data:new Date().toLocaleString()
+  });
+
+  localStorage.setItem("sst",JSON.stringify(dados));
+  alert("✅ NR18 salva!");
+}
+
+/* =============================
+   HISTÓRICO
+============================= */
+function carregarHistorico(){
+  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
+  let html="";
+
+  dados.forEach(r=>{
+    html += `<p><b>${r.tipo}</b> – ${r.data}</p>`;
+  });
+
+  lista.innerHTML = html || "<p>Nenhum registro ainda.</p>";
+}
+
+function limparHistorico(){
+  localStorage.removeItem("sst");
+  alert("Histórico apagado!");
+  carregarHistorico();
+}
 </script>
 
 </body>
