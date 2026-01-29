@@ -216,6 +216,82 @@ Assine diretamente na tela (padrão fiscalização NR35).
 </section>
 <script>
 /* ================================
+   ASSINATURA DIGITAL – FIX MOBILE
+================================ */
+
+let pads = [];
+
+function carregarAssinaturas() {
+  const container = document.getElementById("assinaturas");
+  container.innerHTML = "";
+
+  for (let i = 1; i <= 5; i++) {
+
+    let bloco = document.createElement("div");
+    bloco.innerHTML = `
+      <h3>Trabalhador ${i}</h3>
+
+      <label>Nome:</label>
+      <input id="nome${i}" placeholder="Nome completo">
+
+      <label>CPF:</label>
+      <input id="cpf${i}" placeholder="CPF">
+
+      <label>Assinatura Digital:</label>
+
+      <canvas id="canvas${i}"
+        style="width:100%; height:150px; border:1px solid #000;
+        border-radius:8px; background:white;">
+      </canvas>
+
+      <button class="btn" style="background:gray;" onclick="limparCanvas(${i})">
+        Limpar Assinatura ${i}
+      </button>
+
+      <hr>
+    `;
+
+    container.appendChild(bloco);
+  }
+
+  // Inicializar pads após renderizar
+  setTimeout(() => {
+    for (let i = 1; i <= 5; i++) {
+      let canvas = document.getElementById("canvas" + i);
+
+      // Ajuste real do tamanho do canvas
+      canvas.width = canvas.offsetWidth;
+      canvas.height = 150;
+
+      pads[i] = new SignaturePad(canvas);
+    }
+  }, 300);
+}
+
+function limparCanvas(i) {
+  pads[i].clear();
+}
+
+function limparAssinaturas() {
+  for (let i = 1; i <= 5; i++) {
+    pads[i].clear();
+  }
+}
+
+/* ================================
+   CARREGAR QUANDO ABRIR NR35
+================================ */
+function abrir(id){
+  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
+  document.getElementById(id).style.display="block";
+
+  if(id==="nr35"){
+    carregarAssinaturas(); // força assinatura funcionar sempre
+  }
+}
+</script>
+
+/* ================================
    GERAR 5 ASSINATURAS DIGITAIS
 ================================ */
 let pads = [];
