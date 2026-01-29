@@ -5,20 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NR35 – Autorização Trabalho em Altura</title>
 
+<!-- ✅ Biblioteca de Assinatura -->
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
 <style>
 body{font-family:Arial;margin:0;padding:15px;background:#f4f6f8;}
 header{text-align:center;padding:20px;background:#003366;color:#fff;border-radius:12px;}
 h1{margin:0;font-size:22px;}
-.btn{width:100%;padding:14px;margin:10px 0;border:none;border-radius:10px;
-background:#0059b3;color:white;font-size:16px;font-weight:bold;}
-.save{background:green;}
-.pdf{background:darkred;}
 section{background:#fff;border-radius:12px;padding:15px;margin-top:15px;}
-input,select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #ccc;}
-table{width:100%;border-collapse:collapse;margin-top:10px;}
-th,td{border:1px solid #aaa;padding:6px;font-size:13px;}
-th{background:#e8eef5;}
+
+input,select,textarea{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-top:4px;
+}
+
+.btn{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border:none;
+  border-radius:10px;
+  background:#0059b3;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.save{background:green;}
 .small{font-size:12px;color:#444;}
+
+canvas{
+  width:100%;
+  height:160px;
+  border:2px solid black;
+  border-radius:10px;
+  background:white;
+  touch-action:none;
+}
 </style>
 </head>
 
@@ -46,189 +72,55 @@ th{background:#e8eef5;}
 <input id="resp" placeholder="Ex: Eng. Jadison / Eng. Luan">
 </label>
 
-<h2>2. Tipo de Trabalho</h2>
-<label><input type="checkbox"> Telhado</label>
-<label><input type="checkbox"> Andaimes</label>
-<label><input type="checkbox"> Escadas</label>
-<label><input type="checkbox"> Laje</label>
+<hr>
 
-<h2>3. Capacitação / Exame / Riscos Gerais</h2>
-
-<table>
-<tr><th>Item</th><th>Status</th><th>Medidas de Segurança</th></tr>
-
-<tr><td>Funcionário treinado na atividade?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td><input></td></tr>
-
-<tr><td>Exame médico OK?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td><input></td></tr>
-
-<tr><td>Existe risco de contato com partes energizadas?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td><input></td></tr>
-
-<tr><td>Tempo seco e sem vento forte?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td><input></td></tr>
-
-<tr><td>Existe risco de queda de objetos?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td><input></td></tr>
-
-<tr><td>Área de trabalho isolada?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td><input></td></tr>
-
-<tr><td>Local seguro para fixação do cinto?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td><input></td></tr>
-</table>
-
-<h2>4. Telhados + EPIs</h2>
-
-<table>
-<tr>
-<th>Item</th><th>Status</th>
-<th>EPI</th><th>Status</th>
-</tr>
-
-<tr>
-<td>Escada adequada e em condições?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Sapato biqueira aço?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-
-<tr>
-<td>Sistema trava-quedas instalado?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Cinto com 2 talabartes?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-
-<tr>
-<td>Cordas para içamento?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Óculos de segurança?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-</table>
-
-<h2>5. Andaimes + EPIs</h2>
-
-<table>
-<tr>
-<th>Item</th><th>Status</th>
-<th>EPI</th><th>Status</th>
-</tr>
-
-<tr>
-<td>Andaime montado e nivelado?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Capacete obrigatório?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-
-<tr>
-<td>Sistema trava-quedas presente?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Luvas adequadas?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-</table>
-
-<h2>6. Escadas + EPIs</h2>
-
-<table>
-<tr><th>Item</th><th>Status</th><th>EPI</th><th>Status</th></tr>
-
-<tr>
-<td>Escada em boas condições?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Cinto com talabarte?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-
-<tr>
-<td>Escada ultrapassa 1m do ponto?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Óculos de segurança?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-</table>
-
-<h2>7. Laje + EPIs</h2>
-
-<table>
-<tr><th>Item</th><th>Status</th><th>EPI</th><th>Status</th></tr>
-
-<tr>
-<td>Linha de vida independente instalada?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Trava-quedas retrátil?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-
-<tr>
-<td>Instalações desconectadas?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-<td>Protetor auricular?</td>
-<td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-</tr>
-</table>
-
-<h2>8. Declaração</h2>
+<h2>2. Declaração</h2>
 <p class="small">
 Declaro estar ciente dos riscos e comprometo-me a cumprir todos os itens desta autorização.
 </p>
 
-<h2>9. Assinaturas dos Trabalhadores</h2>
+<hr>
 
-<p class="small">
-Assine diretamente na tela (padrão fiscalização NR35).
-</p>
+<h2>3. Assinaturas dos Trabalhadores (5)</h2>
 
 <div id="assinaturas"></div>
 
-<button class="btn" onclick="limparAssinaturas()">
+<button class="btn" style="background:gray;" onclick="limparAssinaturas()">
 🧹 Limpar Todas Assinaturas
 </button>
 
+<hr>
 
 <label>Liberado por:
-<input placeholder="Responsável Liberação">
+<input id="liberado" placeholder="Responsável pela Liberação">
 </label>
 
 <label>Data:
-<input type="date">
+<input id="data" type="date">
 </label>
 
-<button class="btn save" onclick="alert('✅ Registro salvo no histórico (próxima versão)')">
+<button class="btn save" onclick="salvarTudo()">
 💾 Salvar Autorização Completa
 </button>
 
-<button class="btn pdf" onclick="alert('📄 PDF completo será gerado na próxima etapa profissional')">
-📄 Gerar PDF Fiscalização Completo
-</button>
-
 </section>
-<script>
-/* ================================
-   ASSINATURA DIGITAL – FIX MOBILE
-================================ */
 
+<!-- ✅ SCRIPT ÚNICO LIMPO -->
+<script>
 let pads = [];
 
-function carregarAssinaturas() {
+/* ==========================
+   CRIAR 5 CAMPOS DE ASSINATURA
+========================== */
+function carregarAssinaturas(){
   const container = document.getElementById("assinaturas");
   container.innerHTML = "";
 
-  for (let i = 1; i <= 5; i++) {
+  pads = [];
 
-    let bloco = document.createElement("div");
-    bloco.innerHTML = `
+  for(let i=1;i<=5;i++){
+
+    container.innerHTML += `
       <h3>Trabalhador ${i}</h3>
 
       <label>Nome:</label>
@@ -238,121 +130,80 @@ function carregarAssinaturas() {
       <input id="cpf${i}" placeholder="CPF">
 
       <label>Assinatura Digital:</label>
+      <canvas id="canvas${i}"></canvas>
 
-      <canvas id="canvas${i}"
-        style="width:100%; height:150px; border:1px solid #000;
-        border-radius:8px; background:white;">
-      </canvas>
-
-      <button class="btn" style="background:gray;" onclick="limparCanvas(${i})">
+      <button class="btn" style="background:#666;" onclick="limparCanvas(${i})">
         Limpar Assinatura ${i}
       </button>
 
       <hr>
     `;
-
-    container.appendChild(bloco);
   }
 
-  // Inicializar pads após renderizar
-  setTimeout(() => {
-    for (let i = 1; i <= 5; i++) {
-      let canvas = document.getElementById("canvas" + i);
+  setTimeout(()=>{
+    for(let i=1;i<=5;i++){
+      const canvas = document.getElementById("canvas"+i);
 
-      // Ajuste real do tamanho do canvas
+      // Ajustar tamanho real
       canvas.width = canvas.offsetWidth;
-      canvas.height = 150;
+      canvas.height = 160;
 
       pads[i] = new SignaturePad(canvas);
     }
-  }, 300);
+  },300);
 }
 
-function limparCanvas(i) {
+/* ==========================
+   LIMPAR INDIVIDUAL
+========================== */
+function limparCanvas(i){
   pads[i].clear();
 }
 
-function limparAssinaturas() {
-  for (let i = 1; i <= 5; i++) {
-    pads[i].clear();
-  }
-}
-
-/* ================================
-   CARREGAR QUANDO ABRIR NR35
-================================ */
-function abrir(id){
-  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
-  document.getElementById(id).style.display="block";
-
-  if(id==="nr35"){
-    carregarAssinaturas(); // força assinatura funcionar sempre
-  }
-}
-</script>
-
-/* ================================
-   GERAR 5 ASSINATURAS DIGITAIS
-================================ */
-let pads = [];
-
-function carregarAssinaturas() {
-  let html = "";
-
-  for (let i = 1; i <= 5; i++) {
-    html += `
-      <h3>Trabalhador ${i}</h3>
-
-      <label>Nome:</label>
-      <input id="nome${i}" placeholder="Nome completo">
-
-      <label>CPF:</label>
-      <input id="cpf${i}" placeholder="CPF">
-
-      <label>Assinatura Digital:</label>
-      <canvas id="canvas${i}" width="320" height="120"
-        style="border:1px solid #000; border-radius:8px; background:#fff;">
-      </canvas>
-
-      <button class="btn" style="background:gray;" onclick="limparCanvas(${i})">
-        Limpar Assinatura ${i}
-      </button>
-
-      <hr>
-    `;
-  }
-
-  document.getElementById("assinaturas").innerHTML = html;
-
-  // Criar SignaturePads
-  for (let i = 1; i <= 5; i++) {
-    let canvas = document.getElementById("canvas" + i);
-    pads[i] = new SignaturePad(canvas);
-  }
-}
-
-/* ================================
-   LIMPAR UMA ASSINATURA
-================================ */
-function limparCanvas(i) {
-  pads[i].clear();
-}
-
-/* ================================
+/* ==========================
    LIMPAR TODAS
-================================ */
-function limparAssinaturas() {
-  for (let i = 1; i <= 5; i++) {
+========================== */
+function limparAssinaturas(){
+  for(let i=1;i<=5;i++){
     pads[i].clear();
   }
 }
 
-/* ================================
-   AUTO CARREGAR AO ABRIR
-================================ */
-window.onload = function() {
-  carregarAssinaturas();
-};
+/* ==========================
+   SALVAR DADOS (LOCALSTORAGE)
+========================== */
+function salvarTudo(){
+
+  let trabalhadores = [];
+
+  for(let i=1;i<=5;i++){
+    trabalhadores.push({
+      nome: document.getElementById("nome"+i).value,
+      cpf: document.getElementById("cpf"+i).value,
+      assinatura: pads[i].isEmpty() ? "" : pads[i].toDataURL()
+    });
+  }
+
+  let registro = {
+    tipo: "NR35 Autorização",
+    datahora: new Date().toLocaleString(),
+    local: document.getElementById("local").value,
+    empresa: document.getElementById("empresa").value,
+    responsavel: document.getElementById("resp").value,
+    liberado: document.getElementById("liberado").value,
+    data: document.getElementById("data").value,
+    trabalhadores: trabalhadores
+  };
+
+  localStorage.setItem("nr35_registro", JSON.stringify(registro));
+
+  alert("✅ Autorização NR35 salva com assinaturas!");
+}
+
+/* ==========================
+   AUTO-INICIAR AO ABRIR
+========================== */
+window.onload = carregarAssinaturas;
 </script>
 
 </body>
