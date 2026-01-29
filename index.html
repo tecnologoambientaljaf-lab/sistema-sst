@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema Único SST – Profissional</title>
-
-<!-- Assinatura -->
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<title>Sistema SST Profissional</title>
 
 <!-- PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -17,54 +14,40 @@ header{text-align:center;padding:20px;background:#003366;color:#fff;border-radiu
 h1{margin:0;font-size:22px;}
 .btn{
   width:100%;padding:14px;margin:10px 0;
-  border:none;border-radius:10px;
+  border:none;border-radius:12px;
   background:#0059b3;color:white;
   font-size:16px;font-weight:bold;
 }
 .save{background:green;}
 .pdf{background:darkred;}
-.gray{background:#666;}
+.whats{background:#25D366;}
+.back{background:gray;}
 
 section{
   display:none;
-  background:#fff;
-  border-radius:12px;
+  background:white;
   padding:15px;
   margin-top:15px;
+  border-radius:12px;
 }
 
 input,textarea,select{
   width:100%;
-  padding:8px;
-  border-radius:8px;
+  padding:10px;
+  border-radius:10px;
   border:1px solid #ccc;
-  margin-top:4px;
+  margin-top:6px;
 }
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-}
-
-th,td{
-  border:1px solid #aaa;
-  padding:6px;
-  font-size:13px;
-}
-
-th{background:#e8eef5;}
 
 canvas{
   width:100%;
-  height:150px;
+  height:160px;
   border:2px solid black;
   border-radius:10px;
   background:white;
   touch-action:none;
 }
-
-.small{font-size:12px;color:#444;}
+small{color:#444;}
 </style>
 </head>
 
@@ -78,147 +61,121 @@ canvas{
 
 <!-- MENU -->
 <section id="menu" style="display:block;">
-<h2>Menu Principal</h2>
-
 <button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
-<button class="btn" onclick="abrir('nr18')">🏗️ NR18 – Checklist Obra</button>
+<button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Obra</button>
 <button class="btn" onclick="abrir('historico')">📂 Histórico</button>
-
 </section>
 
-<!-- ========================= NR35 COMPLETA ========================= -->
+<!-- NR35 -->
 <section id="nr35">
-<h2>NR35 – Autorização Trabalho em Altura</h2>
+<h2>📋 NR35 – Autorização Trabalho em Altura</h2>
 
-<label>Local:
-<input id="local">
-</label>
+<label>Local da Obra:</label>
+<input id="local35">
 
-<label>Responsável Empresa:
-<input id="empresa">
-</label>
+<label>Responsável Empresa:</label>
+<input id="empresa35">
 
-<label>Responsável Contratada:
-<input id="resp">
-</label>
+<label>Engenheiro Responsável:</label>
+<input id="eng35" value="Eng. Jadison Fernandes">
 
 <hr>
 
-<h3>Capacitação / Exame / Riscos Gerais</h3>
+<h3>Trabalhador</h3>
 
-<table>
-<tr><th>Item</th><th>Status</th></tr>
-<tr><td>Funcionário treinado?</td><td><select id="g1"><option>Sim</option><option>Não</option><option>N/A</option></select></td></tr>
-<tr><td>Exame médico OK?</td><td><select id="g2"><option>Sim</option><option>Não</option><option>N/A</option></select></td></tr>
-<tr><td>Risco energizado?</td><td><select id="g3"><option>Sim</option><option>Não</option><option>N/A</option></select></td></tr>
-<tr><td>Tempo seco/vento ok?</td><td><select id="g4"><option>Sim</option><option>Não</option><option>N/A</option></select></td></tr>
-<tr><td>Queda de objetos?</td><td><select id="g5"><option>Sim</option><option>Não</option><option>N/A</option></select></td></tr>
-<tr><td>Área isolada?</td><td><select id="g6"><option>Sim</option><option>Não</option><option>N/A</option></select></td></tr>
-</table>
+<label>Nome:</label>
+<input id="nome1">
 
-<hr>
+<label>CPF (obrigatório):</label>
+<input id="cpf1" placeholder="Digite CPF">
 
-<h3>EPIs Obrigatórios</h3>
-<label><input type="checkbox" id="epi1"> Capacete</label>
-<label><input type="checkbox" id="epi2"> Cinto 2 talabartes</label>
-<label><input type="checkbox" id="epi3"> Trava-quedas</label>
-<label><input type="checkbox" id="epi4"> Óculos</label>
-<label><input type="checkbox" id="epi5"> Luvas</label>
-<label><input type="checkbox" id="epi6"> Botina biqueira aço</label>
+<h3>Assinatura Digital</h3>
+<canvas id="canvas1"></canvas>
+<button class="btn back" onclick="limparAss()">Limpar Assinatura</button>
 
 <hr>
-
-<h3>Observações</h3>
-<textarea id="obs"></textarea>
-
-<hr>
-
-<h3>Assinaturas dos Trabalhadores (5)</h3>
-<div id="assinaturas"></div>
-
-<button class="btn gray" onclick="limparAssinaturas()">🧹 Limpar Assinaturas</button>
 
 <button class="btn save" onclick="salvarNR35()">💾 Salvar NR35</button>
+<button class="btn pdf" onclick="gerarPDF_NR35()">📄 Gerar PDF Oficial NR35</button>
 
-<button class="btn pdf" onclick="gerarPDF()">📄 Gerar PDF NR35</button>
+<button class="btn whats" onclick="enviarWhats()">📲 Enviar WhatsApp Engenheiro</button>
 
-<button class="btn" onclick="abrir('menu')">⬅ Voltar</button>
+<button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- ========================= NR18 ========================= -->
+<!-- NR18 -->
 <section id="nr18">
-<h2>NR18 – Checklist Geral da Obra</h2>
+<h2>🦺 NR18 – Checklist Fiscalização</h2>
 
-<label><input type="checkbox"> Guarda-corpo instalado</label>
-<label><input type="checkbox"> Proteção de aberturas</label>
-<label><input type="checkbox"> Linha de vida presente</label>
-<label><input type="checkbox"> Andaimes regulares</label>
-<label><input type="checkbox"> EPIs entregues e registrados</label>
-<label><input type="checkbox"> Área limpa e organizada</label>
-<label><input type="checkbox"> Sinalização obrigatória</label>
-<label><input type="checkbox"> Treinamentos NR18 realizados</label>
+<label>Obra:</label>
+<input id="obra18">
+
+<label>Responsável:</label>
+<input id="resp18">
+
+<hr>
+
+<h3>EPI</h3>
+<select id="epi1"><option>SIM</option><option>NÃO</option></select> Capacete<br><br>
+<select id="epi2"><option>SIM</option><option>NÃO</option></select> Botina<br><br>
+<select id="epi3"><option>SIM</option><option>NÃO</option></select> Luvas<br><br>
+<select id="epi4"><option>SIM</option><option>NÃO</option></select> Óculos<br><br>
+
+<h3>Conclusão</h3>
+<textarea id="obs18" placeholder="Observações"></textarea>
 
 <button class="btn save" onclick="salvarNR18()">💾 Salvar NR18</button>
+<button class="btn pdf" onclick="gerarPDF_NR18()">📄 Gerar PDF Oficial NR18</button>
 
-<button class="btn" onclick="abrir('menu')">⬅ Voltar</button>
+<button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- ========================= HISTÓRICO ========================= -->
+<!-- HISTÓRICO -->
 <section id="historico">
-<h2>Histórico de Registros</h2>
+<h2>📂 Histórico</h2>
 <div id="lista"></div>
-
-<button class="btn gray" onclick="limparHistorico()">🗑 Limpar Histórico</button>
-<button class="btn" onclick="abrir('menu')">⬅ Voltar</button>
+<button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- ========================= SCRIPT ========================= -->
 <script>
-let pads=[];
-
+/* MENU */
 function abrir(id){
   document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
   document.getElementById(id).style.display="block";
-
-  if(id==="nr35"){ carregarAssinaturas(); }
-  if(id==="historico"){ carregarHistorico(); }
+  if(id==="historico") carregarHistorico();
 }
 
-/* ASSINATURAS */
-function carregarAssinaturas(){
-  const div=document.getElementById("assinaturas");
-  div.innerHTML="";
-  pads=[];
+/* ASSINATURA */
+let canvas=document.getElementById("canvas1");
+let ctx=canvas.getContext("2d");
+canvas.width=canvas.offsetWidth;
+canvas.height=160;
 
-  for(let i=1;i<=5;i++){
-    div.innerHTML+=`
-      <h4>Trabalhador ${i}</h4>
-      <input id="nome${i}" placeholder="Nome">
-      <input id="cpf${i}" placeholder="CPF">
-      <canvas id="canvas${i}"></canvas>
-      <button class="btn gray" onclick="pads[${i}].clear()">Limpar</button>
-      <hr>
-    `;
-  }
+let desenhando=false;
+canvas.addEventListener("pointerdown",e=>{
+  desenhando=true;
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX,e.offsetY);
+});
+canvas.addEventListener("pointermove",e=>{
+  if(!desenhando) return;
+  ctx.lineTo(e.offsetX,e.offsetY);
+  ctx.stroke();
+});
+canvas.addEventListener("pointerup",()=>desenhando=false);
 
-  setTimeout(()=>{
-    for(let i=1;i<=5;i++){
-      let c=document.getElementById("canvas"+i);
-      c.width=c.offsetWidth;
-      c.height=150;
-      pads[i]=new SignaturePad(c);
-    }
-  },300);
-}
-
-function limparAssinaturas(){
-  for(let i=1;i<=5;i++) pads[i].clear();
+function limparAss(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
 /* SALVAR */
 function salvarNR35(){
+  if(document.getElementById("cpf1").value.trim()===""){
+    alert("⚠️ CPF obrigatório!");
+    return;
+  }
   let dados=JSON.parse(localStorage.getItem("sst")||"[]");
-  dados.push({tipo:"NR35",data:new Date().toLocaleString(),local:local.value});
+  dados.push({tipo:"NR35",data:new Date().toLocaleString()});
   localStorage.setItem("sst",JSON.stringify(dados));
   alert("✅ NR35 salva!");
 }
@@ -233,35 +190,50 @@ function salvarNR18(){
 /* HISTÓRICO */
 function carregarHistorico(){
   let dados=JSON.parse(localStorage.getItem("sst")||"[]");
-  lista.innerHTML=dados.map(r=>`<p><b>${r.tipo}</b> – ${r.data}</p>`).join("")
-  ||"<p>Nenhum registro ainda.</p>";
-}
-
-function limparHistorico(){
-  localStorage.removeItem("sst");
-  alert("Histórico apagado!");
-  carregarHistorico();
+  lista.innerHTML=dados.map(r=>`<p>✅ ${r.tipo} – ${r.data}</p>`).join("");
 }
 
 /* PDF NR35 */
-function gerarPDF(){
+function gerarPDF_NR35(){
   const { jsPDF } = window.jspdf;
   let doc=new jsPDF();
 
   doc.text("NR35 – Autorização Trabalho em Altura",10,10);
-  doc.text("Local: "+local.value,10,20);
-  doc.text("Empresa: "+empresa.value,10,30);
+  doc.text("Local: "+local35.value,10,20);
+  doc.text("Trabalhador: "+nome1.value,10,30);
+  doc.text("CPF: "+cpf1.value,10,40);
 
-  doc.text("EPIs:",10,45);
-  doc.text("Capacete: "+(epi1.checked?"Sim":"Não"),10,55);
-  doc.text("Cinto: "+(epi2.checked?"Sim":"Não"),10,65);
+  let img=canvas.toDataURL("image/png");
+  doc.text("Assinatura:",10,55);
+  doc.addImage(img,"PNG",10,60,80,30);
 
-  doc.text("Assinaturas:",10,80);
+  doc.save("NR35_Oficial.pdf");
+}
 
-  let img=pads[1].toDataURL();
-  doc.addImage(img,"PNG",10,90,60,30);
+/* PDF NR18 */
+function gerarPDF_NR18(){
+  const { jsPDF } = window.jspdf;
+  let doc=new jsPDF();
 
-  doc.save("NR35-Autorizacao.pdf");
+  doc.text("NR18 – Checklist Fiscalização",10,10);
+  doc.text("Obra: "+obra18.value,10,20);
+  doc.text("Responsável: "+resp18.value,10,30);
+
+  doc.text("Capacete: "+epi1.value,10,45);
+  doc.text("Botina: "+epi2.value,10,55);
+
+  doc.text("Observações:",10,70);
+  doc.text(obs18.value,10,80);
+
+  doc.save("NR18_Oficial.pdf");
+}
+
+/* WHATSAPP */
+function enviarWhats(){
+  let msg="NR35 preenchida – Local: "+local35.value+
+          " Trabalhador: "+nome1.value+
+          " CPF: "+cpf1.value;
+  window.open("https://wa.me/5547988837699?text="+encodeURIComponent(msg));
 }
 </script>
 
