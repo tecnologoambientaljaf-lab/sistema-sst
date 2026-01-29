@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema SST Profissional</title>
+<title>Sistema Único SST</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -18,6 +18,7 @@ h1{margin:0;font-size:22px;}
   background:#0059b3;color:white;
   font-size:16px;font-weight:bold;
 }
+
 .save{background:green;}
 .pdf{background:darkred;}
 .whats{background:#25D366;}
@@ -49,6 +50,7 @@ canvas{
 }
 
 hr{margin:20px 0;}
+h3{margin-top:25px;}
 small{color:#444;}
 </style>
 </head>
@@ -63,12 +65,12 @@ small{color:#444;}
 
 <!-- MENU -->
 <section id="menu" style="display:block;">
-<button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
-<button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Obra</button>
+<button class="btn" onclick="abrir('nr35')">📋 NR35 – Autorização Trabalho em Altura</button>
+<button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Fiscalização</button>
 <button class="btn" onclick="abrir('historico')">📂 Histórico</button>
 </section>
 
-<!-- NR35 -->
+<!-- ======================= NR35 COMPLETA ======================= -->
 <section id="nr35">
 <h2>📋 NR35 – Autorização Trabalho em Altura</h2>
 
@@ -83,7 +85,12 @@ small{color:#444;}
 
 <hr>
 
-<h3>Trabalhadores (5)</h3>
+<h3>Capacitação / Riscos Gerais</h3>
+<div id="checklist35"></div>
+
+<hr>
+
+<h3>Trabalhadores Autorizados (5)</h3>
 <div id="listaTrabalhadores"></div>
 
 <button class="btn save" onclick="salvarNR35()">💾 Salvar NR35</button>
@@ -92,7 +99,7 @@ small{color:#444;}
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- NR18 -->
+<!-- ======================= NR18 ======================= -->
 <section id="nr18">
 <h2>🦺 NR18 – Checklist Fiscalização</h2>
 
@@ -104,36 +111,17 @@ small{color:#444;}
 
 <hr>
 
-<h3>EPI</h3>
-<label>Capacete:
-<select id="epi1"><option>SIM</option><option>NÃO</option></select></label>
+<h3>1️⃣ EPI</h3>
+<div id="epi18"></div>
 
-<label>Botina:
-<select id="epi2"><option>SIM</option><option>NÃO</option></select></label>
+<h3>2️⃣ EPC</h3>
+<div id="epc18"></div>
 
-<label>Luvas:
-<select id="epi3"><option>SIM</option><option>NÃO</option></select></label>
+<h3>3️⃣ Sinalização</h3>
+<div id="sig18"></div>
 
-<label>Óculos:
-<select id="epi4"><option>SIM</option><option>NÃO</option></select></label>
-
-<hr>
-
-<h3>EPC</h3>
-<label>Guarda-corpos:
-<select id="epc1"><option>SIM</option><option>NÃO</option></select></label>
-
-<label>Proteção em aberturas:
-<select id="epc2"><option>SIM</option><option>NÃO</option></select></label>
-
-<hr>
-
-<h3>Sinalização</h3>
-<label>Placas obrigatórias:
-<select id="sig1"><option>SIM</option><option>NÃO</option></select></label>
-
-<label>Áreas isoladas:
-<select id="sig2"><option>SIM</option><option>NÃO</option></select></label>
+<h3>4️⃣ Máquinas e Circulação</h3>
+<div id="maq18"></div>
 
 <hr>
 
@@ -145,7 +133,7 @@ small{color:#444;}
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- HISTÓRICO -->
+<!-- ======================= HISTÓRICO ======================= -->
 <section id="historico">
 <h2>📂 Histórico</h2>
 <div id="lista"></div>
@@ -155,16 +143,50 @@ small{color:#444;}
 <script>
 let pads=[];
 
-/* MENU */
+/* ================= MENU ================= */
 function abrir(id){
   document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
   document.getElementById(id).style.display="block";
 
-  if(id==="nr35") carregarTrabalhadores();
+  if(id==="nr35"){
+    montarChecklistNR35();
+    carregarTrabalhadores();
+  }
+
+  if(id==="nr18"){
+    montarNR18();
+  }
+
   if(id==="historico") carregarHistorico();
 }
 
-/* GERAR 5 TRABALHADORES */
+/* ================= NR35 CHECKLIST ================= */
+function montarChecklistNR35(){
+  let itens=[
+    "Funcionário treinado na atividade?",
+    "Exame médico OK?",
+    "Risco de contato com partes energizadas?",
+    "Tempo seco e sem vento forte?",
+    "Existe risco de queda de objetos?",
+    "Área de trabalho isolada?",
+    "Local seguro para fixação do cinto?"
+  ];
+
+  let html="";
+  itens.forEach((t,i)=>{
+    html+=`
+      <label>${t}
+      <select id="g${i}">
+        <option>SIM</option>
+        <option>NÃO</option>
+        <option>N/A</option>
+      </select></label><br>`;
+  });
+
+  document.getElementById("checklist35").innerHTML=html;
+}
+
+/* ================= 5 TRABALHADORES ================= */
 function carregarTrabalhadores(){
   let div=document.getElementById("listaTrabalhadores");
   div.innerHTML="";
@@ -175,7 +197,10 @@ function carregarTrabalhadores(){
       <h4>Trabalhador ${i}</h4>
       <input id="nome${i}" placeholder="Nome completo">
       <input id="cpf${i}" placeholder="CPF obrigatório">
+
+      <small>Assinatura Digital:</small>
       <canvas id="canvas${i}"></canvas>
+
       <button class="btn back" onclick="limparCanvas(${i})">Limpar Assinatura</button>
       <hr>
     `;
@@ -191,7 +216,7 @@ function carregarTrabalhadores(){
   },300);
 }
 
-/* ASSINATURA */
+/* ================= ASSINATURA TOUCH ================= */
 function iniciarAssinatura(canvas,i){
   let ctx=canvas.getContext("2d");
   let desenhando=false;
@@ -214,11 +239,67 @@ function iniciarAssinatura(canvas,i){
 }
 
 function limparCanvas(i){
-  let p=pads[i];
-  p.ctx.clearRect(0,0,p.canvas.width,p.canvas.height);
+  pads[i].ctx.clearRect(0,0,pads[i].canvas.width,pads[i].canvas.height);
 }
 
-/* SALVAR */
+/* ================= NR18 CHECKLIST ================= */
+function montarNR18(){
+  montarLista("epi18",[
+    "Capacete",
+    "Botas com biqueira",
+    "Luvas adequadas",
+    "Óculos de proteção",
+    "Protetor auricular",
+    "Máscara/respirador",
+    "Cinturão de segurança",
+    "EPI em bom estado",
+    "CA válido"
+  ]);
+
+  montarLista("epc18",[
+    "Guarda-corpos instalados",
+    "Rodapés em áreas elevadas",
+    "Escadas/rampas seguras",
+    "Isolamento de áreas de risco",
+    "Proteção em aberturas",
+    "Proteções em máquinas",
+    "EPC em bom estado"
+  ]);
+
+  montarLista("sig18",[
+    "Placas obrigatórias de EPI",
+    "Sinalização áreas restritas",
+    "Avisos de risco",
+    "Cones/barreiras isolamento",
+    "Sinalização visível"
+  ]);
+
+  montarLista("maq18",[
+    "Vias de circulação definidas",
+    "Separação pedestres/máquinas",
+    "Piso sem obstáculos",
+    "Operadores habilitados",
+    "Máquinas com manutenção",
+    "Alarme de ré funcionando",
+    "Iluminação adequada",
+    "Velocidade controlada"
+  ]);
+}
+
+function montarLista(id,itens){
+  let html="";
+  itens.forEach((t,i)=>{
+    html+=`
+      <label>${t}
+      <select>
+        <option>SIM</option>
+        <option>NÃO</option>
+      </select></label><br>`;
+  });
+  document.getElementById(id).innerHTML=html;
+}
+
+/* ================= SALVAR ================= */
 function salvarNR35(){
   for(let i=1;i<=5;i++){
     if(document.getElementById("cpf"+i).value.trim()===""){
@@ -230,65 +311,70 @@ function salvarNR35(){
   let dados=JSON.parse(localStorage.getItem("sst")||"[]");
   dados.push({tipo:"NR35",data:new Date().toLocaleString()});
   localStorage.setItem("sst",JSON.stringify(dados));
-  alert("✅ NR35 salva com sucesso!");
+  alert("✅ NR35 salva!");
 }
 
 function salvarNR18(){
   let dados=JSON.parse(localStorage.getItem("sst")||"[]");
   dados.push({tipo:"NR18",data:new Date().toLocaleString()});
   localStorage.setItem("sst",JSON.stringify(dados));
-  alert("✅ NR18 salva com sucesso!");
+  alert("✅ NR18 salva!");
 }
 
-/* HISTÓRICO */
+/* ================= HISTÓRICO ================= */
 function carregarHistorico(){
   let dados=JSON.parse(localStorage.getItem("sst")||"[]");
   lista.innerHTML=dados.map(r=>`<p>✅ ${r.tipo} – ${r.data}</p>`).join("");
 }
 
-/* PDF NR35 */
+/* ================= PDF NR35 ================= */
 function gerarPDF_NR35(){
   const { jsPDF } = window.jspdf;
   let doc=new jsPDF();
 
-  doc.text("NR35 – Autorização Trabalho em Altura",10,10);
-  doc.text("Local: "+local35.value,10,20);
+  doc.setFontSize(14);
+  doc.text("NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA",10,15);
 
-  let y=35;
+  doc.setFontSize(11);
+  doc.text("Local: "+local35.value,10,25);
+  doc.text("Empresa: "+empresa35.value,10,32);
+
+  let y=45;
   for(let i=1;i<=5;i++){
     doc.text("Trabalhador "+i+": "+document.getElementById("nome"+i).value,10,y);
     doc.text("CPF: "+document.getElementById("cpf"+i).value,10,y+7);
 
     let img=pads[i].canvas.toDataURL("image/png");
-    doc.addImage(img,"PNG",10,y+12,60,20);
+    doc.addImage(img,"PNG",120,y-2,70,20);
 
-    y+=40;
+    y+=25;
   }
 
   doc.save("NR35_Oficial.pdf");
 }
 
-/* PDF NR18 */
+/* ================= PDF NR18 ================= */
 function gerarPDF_NR18(){
   const { jsPDF } = window.jspdf;
   let doc=new jsPDF();
 
-  doc.text("NR18 – Checklist Fiscalização",10,10);
-  doc.text("Obra: "+obra18.value,10,20);
+  doc.setFontSize(14);
+  doc.text("NR18 – CHECKLIST FISCALIZAÇÃO",10,15);
 
-  doc.text("Capacete: "+epi1.value,10,35);
-  doc.text("Botina: "+epi2.value,10,45);
-  doc.text("Guarda-corpos: "+epc1.value,10,55);
+  doc.setFontSize(11);
+  doc.text("Obra: "+obra18.value,10,25);
+  doc.text("Responsável: "+resp18.value,10,32);
 
-  doc.text("Observações:",10,70);
-  doc.text(obs18.value,10,80);
+  doc.text("Observações:",10,50);
+  doc.text(obs18.value,10,60);
 
   doc.save("NR18_Oficial.pdf");
 }
 
-/* WHATSAPP */
+/* ================= WHATSAPP ================= */
 function enviarWhats(){
-  let msg="NR35 preenchida – Local: "+local35.value;
+  let msg="NR35 preenchida – Local: "+local35.value+
+          " Empresa: "+empresa35.value;
   window.open("https://wa.me/5547988837699?text="+encodeURIComponent(msg));
 }
 </script>
