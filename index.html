@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema Único SST</title>
+<title>SISTEMA SST – NR35 + NR18</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -14,15 +14,13 @@ body{
   padding:15px;
   background:#f4f6f8;
 }
-
 header{
   text-align:center;
   padding:20px;
   background:#003366;
   color:white;
-  border-radius:14px;
+  border-radius:15px;
 }
-
 h1{margin:0;font-size:22px;}
 
 .btn{
@@ -33,12 +31,11 @@ h1{margin:0;font-size:22px;}
   border-radius:12px;
   font-size:16px;
   font-weight:bold;
-  color:white;
   cursor:pointer;
+  color:white;
 }
-
-.menu{background:#0059b3;}
-.save{background:green;}
+.nr35{background:#0059b3;}
+.nr18{background:green;}
 .pdf{background:darkred;}
 .whats{background:#25D366;}
 .back{background:gray;}
@@ -48,29 +45,39 @@ section{
   background:white;
   padding:15px;
   margin-top:15px;
-  border-radius:14px;
+  border-radius:15px;
 }
 
-input,textarea,select{
+input,select,textarea{
   width:100%;
   padding:10px;
   border-radius:10px;
   border:1px solid #ccc;
-  margin-top:6px;
+  margin-top:5px;
 }
 
 canvas{
   width:100%;
-  height:160px;
+  height:140px;
   border:2px solid black;
   border-radius:10px;
   background:white;
   touch-action:none;
 }
 
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
+th,td{
+  border:1px solid #aaa;
+  padding:6px;
+  font-size:14px;
+}
+th{background:#e8eef5;}
+
 hr{margin:20px 0;}
-h3{margin-top:25px;}
-small{color:#444;}
 </style>
 </head>
 
@@ -79,18 +86,21 @@ small{color:#444;}
 <header>
 <h1>SISTEMA ÚNICO SST</h1>
 <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
-<p>Padrão Fiscalização NR35 + NR18</p>
+<p>Padrão Fiscalização Oficial NR35 + NR18</p>
 </header>
 
 <!-- MENU -->
 <section id="menu" style="display:block;">
-<button class="btn menu" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
-<button class="btn menu" onclick="abrir('nr18')">🦺 NR18 – Checklist Fiscalização</button>
-<button class="btn menu" onclick="abrir('historico')">📂 Histórico</button>
+<button class="btn nr35" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
+<button class="btn nr18" onclick="abrir('nr18')">🦺 NR18 – Checklist Fiscalização</button>
+<button class="btn back" onclick="abrir('historico')">📂 Histórico</button>
 </section>
 
-<!-- ================= NR35 ================= -->
+<!-- ===================================================== -->
+<!-- ======================= NR35 ======================== -->
+<!-- ===================================================== -->
 <section id="nr35">
+
 <h2>📋 NR35 – Autorização Trabalho em Altura</h2>
 
 <label>Local da Obra:</label>
@@ -105,35 +115,49 @@ small{color:#444;}
 <hr>
 
 <h3>Capacitação / Riscos Gerais</h3>
-<div id="riscos35"></div>
+
+<table>
+<tr><th>Item</th><th>Status</th></tr>
+
+<tr><td>Funcionário treinado na atividade?</td>
+<td><select id="g0"><option>SIM</option><option>NÃO</option><option>N/A</option></select></td></tr>
+
+<tr><td>Exame médico OK?</td>
+<td><select id="g1"><option>SIM</option><option>NÃO</option><option>N/A</option></select></td></tr>
+
+<tr><td>Contato com partes energizadas?</td>
+<td><select id="g2"><option>SIM</option><option>NÃO</option><option>N/A</option></select></td></tr>
+
+<tr><td>Tempo seco e sem vento forte?</td>
+<td><select id="g3"><option>SIM</option><option>NÃO</option><option>N/A</option></select></td></tr>
+
+<tr><td>Risco de queda de objetos?</td>
+<td><select id="g4"><option>SIM</option><option>NÃO</option><option>N/A</option></select></td></tr>
+
+<tr><td>Área isolada e sinalizada?</td>
+<td><select id="g5"><option>SIM</option><option>NÃO</option><option>N/A</option></select></td></tr>
+
+<tr><td>Local seguro para fixação do cinto?</td>
+<td><select id="g6"><option>SIM</option><option>NÃO</option><option>N/A</option></select></td></tr>
+</table>
 
 <hr>
 
-<h3>Trabalhador</h3>
+<h3>Trabalhadores Autorizados (5)</h3>
+<div id="listaTrabalhadores"></div>
 
-<label>Nome:</label>
-<input id="nome35">
-
-<label>CPF (obrigatório):</label>
-<input id="cpf35" placeholder="Digite CPF">
-
-<h3>Assinatura Digital</h3>
-<canvas id="assinatura35"></canvas>
-
-<button class="btn back" onclick="limparAssinatura()">🧹 Limpar Assinatura</button>
-
-<hr>
-
-<button class="btn save" onclick="salvarNR35()">💾 Salvar NR35</button>
 <button class="btn pdf" onclick="gerarPDF_NR35()">📄 Gerar PDF Oficial NR35</button>
 <button class="btn whats" onclick="enviarWhats()">📲 Enviar WhatsApp Engenheiro</button>
-
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
+
 </section>
 
-<!-- ================= NR18 ================= -->
+<!-- ===================================================== -->
+<!-- ======================= NR18 ======================== -->
+<!-- ===================================================== -->
 <section id="nr18">
-<h2>🦺 NR18 – Checklist Fiscalização</h2>
+
+<h2>🦺 NR18 – Checklist Fiscalização Completo</h2>
 
 <label>Obra:</label>
 <input id="obra18">
@@ -144,199 +168,155 @@ small{color:#444;}
 <hr>
 
 <h3>Capacitação / Riscos Gerais</h3>
-<div id="riscos18"></div>
+<table>
+<tr><th>Item</th><th>Status</th></tr>
+
+<tr><td>Funcionário treinado?</td>
+<td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+
+<tr><td>ASO válido?</td>
+<td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+
+<tr><td>Área isolada e sinalizada?</td>
+<td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+</table>
 
 <hr>
 
-<h3>1️⃣ EPI</h3>
-<div id="epi18"></div>
-
-<h3>2️⃣ EPC</h3>
-<div id="epc18"></div>
-
-<h3>3️⃣ Sinalização</h3>
-<div id="sig18"></div>
-
-<h3>4️⃣ Máquinas e Circulação</h3>
-<div id="maq18"></div>
+<h3>EPI Completo</h3>
+<table>
+<tr><th>EPI</th><th>Status</th></tr>
+<tr><td>Capacete</td><td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+<tr><td>Botina</td><td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+<tr><td>Luvas</td><td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+<tr><td>Óculos</td><td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+<tr><td>Cinturão de segurança</td><td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+<tr><td>CA válido</td><td><select><option>SIM</option><option>NÃO</option></select></td></tr>
+</table>
 
 <hr>
 
-<h3>Conclusão</h3>
-<textarea id="obs18" placeholder="Observações"></textarea>
+<h3>Observações</h3>
+<textarea id="obs18"></textarea>
 
-<button class="btn save" onclick="salvarNR18()">💾 Salvar NR18</button>
 <button class="btn pdf" onclick="gerarPDF_NR18()">📄 Gerar PDF Oficial NR18</button>
-
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
+
 </section>
 
-<!-- ================= HISTÓRICO ================= -->
+<!-- ===================================================== -->
+<!-- ===================== HISTÓRICO ===================== -->
+<!-- ===================================================== -->
 <section id="historico">
-<h2>📂 Histórico de Registros</h2>
+<h2>📂 Histórico Automático</h2>
 <div id="lista"></div>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
 <script>
+let pads=[];
+
 /* ================= MENU ================= */
 function abrir(id){
   document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
   document.getElementById(id).style.display="block";
 
-  if(id==="nr35"){
-    montarRiscos("riscos35");
-    iniciarCanvas();
-  }
-
-  if(id==="nr18"){
-    montarRiscos("riscos18");
-    montarNR18();
-  }
-
-  if(id==="historico"){
-    carregarHistorico();
-  }
+  if(id==="nr35") carregarTrabalhadores();
+  if(id==="historico") carregarHistorico();
 }
 
-/* ================= RISCOS ================= */
-const itensRisco=[
- "Funcionário treinado na atividade?",
- "Exame médico OK?",
- "Risco de contato com partes energizadas?",
- "Tempo seco e sem vento forte?",
- "Existe risco de queda de objetos?",
- "Área de trabalho isolada?",
- "Local seguro para fixação do cinto?"
-];
+/* ================= TRABALHADORES ================= */
+function carregarTrabalhadores(){
+  let div=document.getElementById("listaTrabalhadores");
+  div.innerHTML="";
+  pads=[];
 
-function montarRiscos(divID){
-  let html="";
-  itensRisco.forEach((t,i)=>{
-    html+=`
-      <label>${t}
-        <select id="${divID}_${i}">
-          <option>SIM</option>
-          <option>NÃO</option>
-          <option>N/A</option>
-        </select>
-      </label><br><br>
+  for(let i=1;i<=5;i++){
+    div.innerHTML+=`
+      <h4>Trabalhador ${i}</h4>
+      <input id="nome${i}" placeholder="Nome completo">
+      <input id="cpf${i}" placeholder="CPF obrigatório">
+
+      <small>Assinatura Digital:</small>
+      <canvas id="canvas${i}"></canvas>
+
+      <button class="btn back" onclick="limparCanvas(${i})">Limpar</button>
+      <hr>
     `;
-  });
-  document.getElementById(divID).innerHTML=html;
+  }
+
+  setTimeout(()=>{
+    for(let i=1;i<=5;i++){
+      iniciarAssinatura(i);
+    }
+  },300);
 }
 
-/* ================= ASSINATURA FUNCIONANDO MOBILE ================= */
-let canvas,ctx,desenhando=false;
-
-function iniciarCanvas(){
-  canvas=document.getElementById("assinatura35");
-  ctx=canvas.getContext("2d");
+/* ================= ASSINATURA MOBILE CORRIGIDA ================= */
+function iniciarAssinatura(i){
+  let canvas=document.getElementById("canvas"+i);
+  let ctx=canvas.getContext("2d");
 
   canvas.width=canvas.offsetWidth;
-  canvas.height=160;
+  canvas.height=140;
 
-  canvas.onpointerdown=(e)=>{
-    desenhando=true;
-    ctx.beginPath();
-    ctx.moveTo(e.offsetX,e.offsetY);
-  };
+  let desenhando=false;
 
-  canvas.onpointermove=(e)=>{
-    if(!desenhando) return;
-    ctx.lineTo(e.offsetX,e.offsetY);
-    ctx.stroke();
-  };
-
-  canvas.onpointerup=()=>desenhando=false;
-}
-
-function limparAssinatura(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-}
-
-/* ================= NR18 LISTAS ================= */
-function montarLista(id,itens){
-  let html="";
-  itens.forEach(t=>{
-    html+=`
-      <label>${t}
-        <select>
-          <option>SIM</option>
-          <option>NÃO</option>
-        </select>
-      </label><br><br>
-    `;
-  });
-  document.getElementById(id).innerHTML=html;
-}
-
-function montarNR18(){
-  montarLista("epi18",[
-    "Capacete de segurança",
-    "Botas com biqueira",
-    "Luvas adequadas",
-    "Óculos de proteção",
-    "Protetor auricular",
-    "Máscara/respirador",
-    "Cinturão de segurança",
-    "EPI em bom estado",
-    "CA válido"
-  ]);
-
-  montarLista("epc18",[
-    "Guarda-corpos instalados",
-    "Rodapés em áreas elevadas",
-    "Escadas/rampas seguras",
-    "Isolamento de áreas de risco",
-    "Proteção em aberturas",
-    "Proteções em máquinas",
-    "EPC em bom estado"
-  ]);
-
-  montarLista("sig18",[
-    "Placas obrigatórias de EPI",
-    "Sinalização de áreas restritas",
-    "Avisos de risco",
-    "Cones/barreiras isolamento",
-    "Sinalização visível"
-  ]);
-
-  montarLista("maq18",[
-    "Vias de circulação definidas",
-    "Separação pedestres/máquinas",
-    "Piso sem obstáculos",
-    "Operadores habilitados",
-    "Máquinas com manutenção",
-    "Alarme de ré funcionando",
-    "Iluminação adequada",
-    "Velocidade controlada"
-  ]);
-}
-
-/* ================= SALVAR ================= */
-function salvarNR35(){
-  if(cpf35.value.trim()==""){
-    alert("⚠️ CPF obrigatório!");
-    return;
+  function pos(e){
+    let r=canvas.getBoundingClientRect();
+    return {
+      x:(e.touches?e.touches[0].clientX:e.clientX)-r.left,
+      y:(e.touches?e.touches[0].clientY:e.clientY)-r.top
+    };
   }
 
-  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
-  dados.push({tipo:"NR35",data:new Date().toLocaleString()});
-  localStorage.setItem("sst",JSON.stringify(dados));
+  canvas.addEventListener("mousedown",e=>{
+    desenhando=true;
+    let p=pos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+  });
 
-  alert("✅ NR35 salva com sucesso!");
+  canvas.addEventListener("mousemove",e=>{
+    if(!desenhando) return;
+    let p=pos(e);
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener("mouseup",()=>desenhando=false);
+
+  canvas.addEventListener("touchstart",e=>{
+    desenhando=true;
+    let p=pos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+  });
+
+  canvas.addEventListener("touchmove",e=>{
+    e.preventDefault();
+    if(!desenhando) return;
+    let p=pos(e);
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+  });
+
+  canvas.addEventListener("touchend",()=>desenhando=false);
+
+  pads[i]={canvas,ctx};
 }
 
-function salvarNR18(){
-  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
-  dados.push({tipo:"NR18",data:new Date().toLocaleString()});
-  localStorage.setItem("sst",JSON.stringify(dados));
-
-  alert("✅ NR18 salva com sucesso!");
+function limparCanvas(i){
+  pads[i].ctx.clearRect(0,0,pads[i].canvas.width,pads[i].canvas.height);
 }
 
 /* ================= HISTÓRICO ================= */
+function salvar(tipo){
+  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
+  dados.push({tipo,data:new Date().toLocaleString()});
+  localStorage.setItem("sst",JSON.stringify(dados));
+}
+
 function carregarHistorico(){
   let dados=JSON.parse(localStorage.getItem("sst")||"[]");
   lista.innerHTML=dados.map(r=>`<p>✅ ${r.tipo} – ${r.data}</p>`).join("");
@@ -348,16 +328,27 @@ function gerarPDF_NR35(){
   let doc=new jsPDF();
 
   doc.text("NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA",10,15);
-  doc.text("Local: "+local35.value,10,30);
-  doc.text("Empresa: "+empresa35.value,10,38);
-  doc.text("Trabalhador: "+nome35.value,10,50);
-  doc.text("CPF: "+cpf35.value,10,58);
+  doc.text("Local: "+local35.value,10,25);
+  doc.text("Empresa: "+empresa35.value,10,32);
 
-  let img=canvas.toDataURL("image/png");
-  doc.text("Assinatura:",10,75);
-  doc.addImage(img,"PNG",10,80,90,30);
+  let y=45;
+  for(let i=1;i<=5;i++){
+    if(document.getElementById("cpf"+i).value.trim()==""){
+      alert("⚠️ CPF obrigatório no trabalhador "+i);
+      return;
+    }
+
+    doc.text("Trabalhador "+i+": "+document.getElementById("nome"+i).value,10,y);
+    doc.text("CPF: "+document.getElementById("cpf"+i).value,10,y+7);
+
+    let img=pads[i].canvas.toDataURL("image/png");
+    doc.addImage(img,"PNG",120,y-2,70,20);
+
+    y+=25;
+  }
 
   doc.save("NR35_Oficial.pdf");
+  salvar("NR35 Emitida");
 }
 
 /* ================= PDF NR18 ================= */
@@ -366,20 +357,19 @@ function gerarPDF_NR18(){
   let doc=new jsPDF();
 
   doc.text("NR18 – CHECKLIST FISCALIZAÇÃO",10,15);
-  doc.text("Obra: "+obra18.value,10,30);
-  doc.text("Responsável: "+resp18.value,10,38);
+  doc.text("Obra: "+obra18.value,10,25);
+  doc.text("Responsável: "+resp18.value,10,32);
 
-  doc.text("Observações:",10,55);
-  doc.text(obs18.value,10,65);
+  doc.text("Observações:",10,50);
+  doc.text(obs18.value,10,60);
 
   doc.save("NR18_Oficial.pdf");
+  salvar("NR18 Emitida");
 }
 
 /* ================= WHATSAPP ================= */
 function enviarWhats(){
-  let msg="NR35 preenchida - Local: "+local35.value+
-          " Trabalhador: "+nome35.value+
-          " CPF: "+cpf35.value;
+  let msg="NR35 preenchida – Local: "+local35.value;
   window.open("https://wa.me/5547988837699?text="+encodeURIComponent(msg));
 }
 </script>
