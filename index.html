@@ -1,322 +1,307 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Único SST – NR35</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Único SST – NR35 + NR18</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 15px;
-      background: #f4f6f8;
-    }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    header {
-      text-align: center;
-      padding: 20px;
-      background: #003366;
-      color: white;
-      border-radius: 12px;
-    }
+<style>
+body{font-family:Arial;margin:0;padding:15px;background:#f4f6f8;}
+header{text-align:center;padding:20px;background:#003366;color:#fff;border-radius:12px;}
+h1{margin:0;font-size:22px;}
 
-    h1 {
-      margin: 0;
-      font-size: 22px;
-    }
+.btn{
+  width:100%;padding:14px;margin:10px 0;
+  border:none;border-radius:12px;
+  font-size:16px;font-weight:bold;
+  color:white;
+}
+.nr35{background:#0059b3;}
+.nr18{background:#008000;}
+.pdf{background:darkred;}
+.back{background:gray;}
 
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      font-size: 17px;
-      border: none;
-      border-radius: 10px;
-      background: #0059b3;
-      color: white;
-      cursor: pointer;
-    }
+section{
+  display:none;
+  background:white;
+  padding:15px;
+  margin-top:15px;
+  border-radius:12px;
+}
 
-    .save { background: green; }
-    .pdf { background: darkred; }
+input,textarea,select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:6px;
+}
 
-    section {
-      display: none;
-      margin-top: 15px;
-      padding: 15px;
-      background: white;
-      border-radius: 12px;
-    }
+canvas{
+  width:100%;
+  height:160px;
+  border:2px solid black;
+  border-radius:10px;
+  background:white;
+  touch-action:none;
+}
 
-    label {
-      display: block;
-      margin: 8px 0;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    textarea { height: 60px; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-    }
-
-    th, td {
-      border: 1px solid #aaa;
-      padding: 6px;
-      font-size: 14px;
-    }
-
-    th { background: #e8eef5; }
-
-  </style>
+hr{margin:20px 0;}
+h3{margin-top:20px;}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>SISTEMA ÚNICO SST</h1>
-  <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
-  <p>Padrão Fiscalização – NR35 Trabalho em Altura</p>
+<h1>SISTEMA ÚNICO SST</h1>
+<p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
+<p>Padrão Fiscalização NR35 + NR18</p>
 </header>
 
-<button class="btn" onclick="abrir('nr35')">📋 NR35 – Autorização Trabalho em Altura</button>
-<button class="btn" onclick="abrir('historico')">📂 Histórico</button>
+<!-- MENU -->
+<section id="menu" style="display:block;">
+<button class="btn nr35" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
+<button class="btn nr18" onclick="abrir('nr18')">🦺 NR18 – Checklist Fiscalização</button>
+<button class="btn back" onclick="abrir('historico')">📂 Histórico</button>
+</section>
 
-<!-- ================= NR35 COMPLETO ================= -->
+<!-- ======================= NR35 ======================= -->
 <section id="nr35">
+<h2>📋 NR35 – Autorização Trabalho em Altura</h2>
 
-  <h2>Autorização para Trabalho em Altura (NR35)</h2>
+<label>Local da Obra:</label>
+<input id="local35">
 
-  <h3>Dados da Obra</h3>
-  <label>Local:
-    <input id="local" placeholder="Ex: Colégio Adventista">
-  </label>
+<label>Responsável Empresa:</label>
+<input id="empresa35">
 
-  <label>Responsável Empresa:
-    <input id="empresa" placeholder="Ex: Projeto A">
-  </label>
+<hr>
 
-  <label>Responsável Contratada:
-    <input id="responsavel" placeholder="Ex: Eng. Jadison / Eng. Luan">
-  </label>
+<h3>Capacitação / Riscos Gerais</h3>
+<div id="riscos35"></div>
 
-  <h3>Tipo de Trabalho</h3>
-  <label><input type="checkbox" id="telhado"> Em Telhado</label>
-  <label><input type="checkbox" id="andaime"> Com Andaimes</label>
-  <label><input type="checkbox" id="escada"> Com Escadas</label>
-  <label><input type="checkbox" id="laje"> Em Laje</label>
+<hr>
 
-  <!-- Checklist Geral -->
-  <h3>Capacitação / Exames / Riscos Gerais</h3>
+<h3>Trabalhador</h3>
 
-  <table>
-    <tr><th>Item</th><th>Status</th><th>Medidas de Segurança</th></tr>
+<label>Nome:</label>
+<input id="nome35">
 
-    <tr>
-      <td>Funcionário treinado na atividade?</td>
-      <td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-      <td><input></td>
-    </tr>
+<label>CPF (obrigatório):</label>
+<input id="cpf35">
 
-    <tr>
-      <td>Exame médico OK?</td>
-      <td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-      <td><input></td>
-    </tr>
+<h3>Assinatura Digital</h3>
+<canvas id="assinatura"></canvas>
+<button class="btn back" onclick="limparAssinatura()">Limpar Assinatura</button>
 
-    <tr>
-      <td>Existe risco de contato com partes energizadas?</td>
-      <td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-      <td><input></td>
-    </tr>
+<hr>
 
-    <tr>
-      <td>Área de trabalho isolada e sinalizada?</td>
-      <td><select><option>Sim</option><option>Não</option><option>N/A</option></select></td>
-      <td><input></td>
-    </tr>
-  </table>
-
-  <!-- TELHADOS -->
-  <h3>TRABALHOS EM TELHADOS</h3>
-  <p>(Checklist + EPIs conforme planilha)</p>
-
-  <table>
-    <tr>
-      <th>Item</th><th>Sim</th><th>Não</th><th>N/A</th>
-      <th>EPI</th><th>Sim</th><th>Não</th><th>N/A</th>
-    </tr>
-
-    <tr>
-      <td>Escada adequada e em condições?</td>
-      <td><input type="radio" name="t1"></td>
-      <td><input type="radio" name="t1"></td>
-      <td><input type="radio" name="t1"></td>
-
-      <td>Sapato com biqueira de aço?</td>
-      <td><input type="radio" name="te1"></td>
-      <td><input type="radio" name="te1"></td>
-      <td><input type="radio" name="te1"></td>
-    </tr>
-
-    <tr>
-      <td>Sistema trava-quedas instalado?</td>
-      <td><input type="radio" name="t2"></td>
-      <td><input type="radio" name="t2"></td>
-      <td><input type="radio" name="t2"></td>
-
-      <td>Cinto segurança com 2 talabartes?</td>
-      <td><input type="radio" name="te2"></td>
-      <td><input type="radio" name="te2"></td>
-      <td><input type="radio" name="te2"></td>
-    </tr>
-  </table>
-
-  <!-- ANDAIMES -->
-  <h3>TRABALHOS COM ANDAIMES</h3>
-
-  <table>
-    <tr>
-      <th>Item</th><th>Sim</th><th>Não</th><th>N/A</th>
-      <th>EPI</th><th>Sim</th><th>Não</th><th>N/A</th>
-    </tr>
-
-    <tr>
-      <td>Andaime montado e nivelado?</td>
-      <td><input type="radio" name="a1"></td>
-      <td><input type="radio" name="a1"></td>
-      <td><input type="radio" name="a1"></td>
-
-      <td>Capacete obrigatório?</td>
-      <td><input type="radio" name="ae1"></td>
-      <td><input type="radio" name="ae1"></td>
-      <td><input type="radio" name="ae1"></td>
-    </tr>
-
-    <tr>
-      <td>Sistema trava-quedas presente?</td>
-      <td><input type="radio" name="a2"></td>
-      <td><input type="radio" name="a2"></td>
-      <td><input type="radio" name="a2"></td>
-
-      <td>Óculos de segurança?</td>
-      <td><input type="radio" name="ae2"></td>
-      <td><input type="radio" name="ae2"></td>
-      <td><input type="radio" name="ae2"></td>
-    </tr>
-  </table>
-
-  <!-- LAJE -->
-  <h3>TRABALHOS EM LAJE</h3>
-
-  <table>
-    <tr>
-      <th>Item</th><th>Sim</th><th>Não</th><th>N/A</th>
-      <th>EPI</th><th>Sim</th><th>Não</th><th>N/A</th>
-    </tr>
-
-    <tr>
-      <td>Linha de vida independente instalada?</td>
-      <td><input type="radio" name="l1"></td>
-      <td><input type="radio" name="l1"></td>
-      <td><input type="radio" name="l1"></td>
-
-      <td>Trava-quedas retrátil?</td>
-      <td><input type="radio" name="le1"></td>
-      <td><input type="radio" name="le1"></td>
-      <td><input type="radio" name="le1"></td>
-    </tr>
-
-    <tr>
-      <td>Instalações elétricas desconectadas?</td>
-      <td><input type="radio" name="l2"></td>
-      <td><input type="radio" name="l2"></td>
-      <td><input type="radio" name="l2"></td>
-
-      <td>Protetor auricular?</td>
-      <td><input type="radio" name="le2"></td>
-      <td><input type="radio" name="le2"></td>
-      <td><input type="radio" name="le2"></td>
-    </tr>
-  </table>
-
-  <h3>Observações Gerais</h3>
-  <textarea id="obs" placeholder="Observações técnicas..."></textarea>
-
-  <button class="btn save" onclick="salvarNR35()">💾 Salvar Autorização NR35</button>
-  <button class="btn pdf" onclick="gerarPDF()">📄 Gerar PDF Fiscalização</button>
-
+<button class="btn pdf" onclick="gerarPDF_NR35()">📄 Gerar PDF NR35</button>
+<button class="btn back" onclick="salvarRegistro('NR35')">💾 Salvar Registro</button>
+<button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- ================= HISTÓRICO ================= -->
+<!-- ======================= NR18 ======================= -->
+<section id="nr18">
+<h2>🦺 NR18 – Checklist Fiscalização</h2>
+
+<label>Obra:</label>
+<input id="obra18">
+
+<label>Responsável:</label>
+<input id="resp18">
+
+<hr>
+
+<h3>Capacitação / Riscos Gerais</h3>
+<div id="riscos18"></div>
+
+<hr>
+
+<h3>EPI</h3>
+
+<label>Capacete:
+<select id="epi1"><option>SIM</option><option>NÃO</option></select></label><br>
+
+<label>Botina:
+<select id="epi2"><option>SIM</option><option>NÃO</option></select></label><br>
+
+<label>Luvas:
+<select id="epi3"><option>SIM</option><option>NÃO</option></select></label><br>
+
+<label>Óculos:
+<select id="epi4"><option>SIM</option><option>NÃO</option></select></label><br>
+
+<hr>
+
+<h3>Observações</h3>
+<textarea id="obs18"></textarea>
+
+<button class="btn pdf" onclick="gerarPDF_NR18()">📄 Gerar PDF NR18</button>
+<button class="btn back" onclick="salvarRegistro('NR18')">💾 Salvar Registro</button>
+<button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
+</section>
+
+<!-- ======================= HISTÓRICO ======================= -->
 <section id="historico">
-  <h2>Histórico de Registros</h2>
-  <div id="lista"></div>
+<h2>📂 Histórico de Registros</h2>
+<div id="lista"></div>
+<button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
-
-<!-- ================= FUNÇÕES ================= -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
+/* MENU */
 function abrir(id){
   document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
   document.getElementById(id).style.display="block";
   if(id==="historico") carregarHistorico();
 }
 
-function salvarNR35(){
-  let registro = {
-    tipo: "NR35 Autorização",
-    data: new Date().toLocaleString(),
-    local: document.getElementById("local").value,
-    empresa: document.getElementById("empresa").value,
-    responsavel: document.getElementById("responsavel").value,
-    obs: document.getElementById("obs").value
-  };
+/* CHECKLIST RISCOS */
+const riscos=[
+ "Funcionário treinado na atividade?",
+ "Exame médico OK?",
+ "Contato com partes energizadas?",
+ "Tempo seco e sem vento forte?",
+ "Risco de queda de objetos?",
+ "Área de trabalho isolada?",
+ "Local seguro para fixação do cinto?"
+];
 
-  let dados = JSON.parse(localStorage.getItem("sst")||"[]");
-  dados.push(registro);
-  localStorage.setItem("sst", JSON.stringify(dados));
+function montarRiscos(div){
+  let html="";
+  riscos.forEach((t,i)=>{
+    html+=`
+      <label>${t}
+      <select id="${div}_${i}">
+        <option>SIM</option>
+        <option>NÃO</option>
+        <option>N/A</option>
+      </select></label><br><br>`;
+  });
+  document.getElementById(div).innerHTML=html;
+}
 
-  alert("✅ Autorização NR35 salva com sucesso!");
+montarRiscos("riscos35");
+montarRiscos("riscos18");
+
+/* ASSINATURA DIGITAL */
+let canvas=document.getElementById("assinatura");
+let ctx=canvas.getContext("2d");
+canvas.width=canvas.offsetWidth;
+canvas.height=160;
+
+let desenhando=false;
+
+canvas.addEventListener("pointerdown",e=>{
+  desenhando=true;
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX,e.offsetY);
+});
+
+canvas.addEventListener("pointermove",e=>{
+  if(!desenhando) return;
+  ctx.lineTo(e.offsetX,e.offsetY);
+  ctx.stroke();
+});
+
+canvas.addEventListener("pointerup",()=>desenhando=false);
+
+function limparAssinatura(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+/* SALVAR HISTÓRICO */
+function salvarRegistro(tipo){
+  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
+  dados.push({tipo:tipo,data:new Date().toLocaleString()});
+  localStorage.setItem("sst",JSON.stringify(dados));
+  alert("✅ Registro salvo: "+tipo);
 }
 
 function carregarHistorico(){
-  let dados = JSON.parse(localStorage.getItem("sst")||"[]");
-  let html="";
-  dados.forEach(r=>{
-    html += `<p><b>${r.tipo}</b> – ${r.data}<br>${r.local}</p><hr>`;
-  });
-  document.getElementById("lista").innerHTML =
-    html || "<p>Nenhum registro salvo ainda.</p>";
+  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
+  lista.innerHTML=dados.map(r=>`<p>✅ ${r.tipo} – ${r.data}</p>`).join("");
 }
 
-function gerarPDF(){
+/* PDF NR35 */
+function gerarPDF_NR35(){
+  if(cpf35.value.trim()==""){
+    alert("⚠️ CPF obrigatório!");
+    return;
+  }
+
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+  let doc=new jsPDF();
 
-  doc.setFontSize(14);
-  doc.text("NR35 – AUTORIZAÇÃO PARA TRABALHO EM ALTURA", 15, 20);
+  doc.text("NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA",10,15);
+  doc.text("Local: "+local35.value,10,30);
+  doc.text("Empresa: "+empresa35.value,10,38);
 
-  doc.setFontSize(11);
-  doc.text("Local: " + document.getElementById("local").value, 15, 35);
-  doc.text("Empresa: " + document.getElementById("empresa").value, 15, 45);
-  doc.text("Responsável: " + document.getElementById("responsavel").value, 15, 55);
+  let y=55;
+  doc.text("Capacitação / Riscos Gerais:",10,y);
 
-  doc.text("Documento emitido para fins de fiscalização.", 15, 75);
+  y+=10;
+  riscos.forEach((t,i)=>{
+    let val=document.getElementById("riscos35_"+i).value;
+    doc.text("- "+t+" ["+val+"]",10,y);
+    y+=7;
+  });
 
-  doc.save("Autorizacao_NR35_Fiscalizacao.pdf");
+  y+=10;
+  doc.text("Trabalhador: "+nome35.value,10,y);
+  y+=7;
+  doc.text("CPF: "+cpf35.value,10,y);
+
+  y+=10;
+  doc.text("Assinatura:",10,y);
+
+  let img=canvas.toDataURL("image/png");
+  doc.addImage(img,"PNG",10,y+5,80,25);
+
+  doc.save("NR35_Oficial.pdf");
+}
+
+/* PDF NR18 */
+function gerarPDF_NR18(){
+  const { jsPDF } = window.jspdf;
+  let doc=new jsPDF();
+
+  doc.text("NR18 – CHECKLIST FISCALIZAÇÃO",10,15);
+  doc.text("Obra: "+obra18.value,10,30);
+  doc.text("Responsável: "+resp18.value,10,38);
+
+  let y=55;
+  doc.text("Capacitação / Riscos Gerais:",10,y);
+
+  y+=10;
+  riscos.forEach((t,i)=>{
+    let val=document.getElementById("riscos18_"+i).value;
+    doc.text("- "+t+" ["+val+"]",10,y);
+    y+=7;
+  });
+
+  y+=10;
+  doc.text("EPI:",10,y);
+
+  y+=7;
+  doc.text("Capacete: "+epi1.value,10,y);
+  y+=7;
+  doc.text("Botina: "+epi2.value,10,y);
+  y+=7;
+  doc.text("Luvas: "+epi3.value,10,y);
+  y+=7;
+  doc.text("Óculos: "+epi4.value,10,y);
+
+  y+=10;
+  doc.text("Observações:",10,y);
+  y+=7;
+  doc.text(obs18.value,10,y);
+
+  doc.save("NR18_Oficial.pdf");
 }
 </script>
 
