@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sistema SST – NR35 + NR18</title>
 
-<!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- AutoTable -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
 <style>
@@ -28,6 +25,7 @@ h1{margin:0;font-size:22px;}
   font-weight:bold;
 }
 
+.save{background:green;}
 .pdf{background:darkred;}
 .back{background:gray;}
 .whats{background:#25D366;}
@@ -73,18 +71,19 @@ hr{margin:20px 0;}
 <header>
 <h1>Sistema Único SST</h1>
 <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
-<p>Padrão Fiscalização Oficial</p>
+<p>NR35 + NR18 – Fiscalização Oficial</p>
 </header>
 
 <!-- MENU -->
 <section id="menu" style="display:block;">
 <button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
-<button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Fiscalização</button>
+<button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Obra</button>
+<button class="btn" onclick="abrir('historico')">📂 Histórico Salvo</button>
 </section>
 
 <!-- ================= NR35 ================= -->
 <section id="nr35">
-<h2>📋 NR35 – Autorização Trabalho em Altura</h2>
+<h2>📋 NR35 – Checklist Trabalho em Altura</h2>
 
 <label>Local da Obra:</label>
 <input id="local35">
@@ -94,15 +93,16 @@ hr{margin:20px 0;}
 
 <hr>
 
-<h3>✅ Checklist NR35 (Fiscalização)</h3>
+<h3>Checklist NR35</h3>
 <div id="checkNR35"></div>
 
 <hr>
 
-<h3>👷 Trabalhadores (5) + Assinatura</h3>
+<h3>Trabalhadores + Assinatura</h3>
 <div id="listaTrabalhadores"></div>
 
-<button class="btn pdf" onclick="gerarPDF_NR35()">📄 Gerar PDF Oficial NR35</button>
+<button class="btn save" onclick="salvarChecklist('NR35')">💾 Salvar NR35</button>
+<button class="btn pdf" onclick="gerarPDF_NR35()">📄 Gerar PDF NR35</button>
 <button class="btn whats" onclick="enviarWhats('NR35')">📲 WhatsApp Engenheiro</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
@@ -119,13 +119,19 @@ hr{margin:20px 0;}
 
 <hr>
 
-<h3>✅ Checklist Completo NR18 (EPI + EPC)</h3>
+<h3>Checklist NR18</h3>
 <div id="checkNR18"></div>
 
-<hr>
-
-<button class="btn pdf" onclick="gerarPDF_NR18()">📄 Gerar PDF Oficial NR18</button>
+<button class="btn save" onclick="salvarChecklist('NR18')">💾 Salvar NR18</button>
+<button class="btn pdf" onclick="gerarPDF_NR18()">📄 Gerar PDF NR18</button>
 <button class="btn whats" onclick="enviarWhats('NR18')">📲 WhatsApp Engenheiro</button>
+<button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
+</section>
+
+<!-- ================= HISTÓRICO ================= -->
+<section id="historico">
+<h2>📂 Histórico de Checklists</h2>
+<div id="listaHistorico"></div>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
@@ -135,14 +141,12 @@ hr{margin:20px 0;}
 const checklistNR35=[
  "Funcionário treinado na atividade?",
  "Exame médico ocupacional válido?",
- "Risco de contato com energia elétrica?",
  "Área isolada e sinalizada?",
  "Linha de Vida instalada e inspecionada?",
  "Cinturão paraquedista verificado?",
  "Talabarte com absorvedor íntegro?",
  "Trava-quedas funcionando corretamente?",
  "Mosquetões sem deformações?",
- "Capacete com jugular sem trincas?",
  "Guarda-corpo e rodapé instalados?",
  "Ancoragem validada com ART?"
 ];
@@ -150,24 +154,16 @@ const checklistNR35=[
 const checklistNR18=[
  "Capacete com jugular obrigatório?",
  "Botas com biqueira de aço?",
- "Luvas adequadas à atividade?",
  "Óculos de proteção?",
- "Protetor auricular quando aplicável?",
- "Máscara/respirador poeira ou fumos?",
- "Cinturão para trabalho em altura?",
- "EPIs em bom estado de conservação?",
+ "Luvas adequadas?",
+ "Cinto para trabalho em altura?",
  "EPIs com CA válido?",
- "Colaboradores treinados para uso correto?",
-
  "Guarda-corpos e rodapés instalados?",
- "Andaimes travados, nivelados e completos?",
- "Plataformas/bandejas de retenção instaladas?",
- "Linhas de Vida instaladas e inspecionadas?",
- "Proteção em aberturas de piso e lajes?",
- "Isolamento e sinalização áreas de risco?",
+ "Andaimes travados e completos?",
+ "Linhas de Vida instaladas?",
+ "Sinalização e isolamento de áreas de risco?",
  "Painéis elétricos protegidos e aterrados?",
- "Rampas e passarelas com corrimão?",
- "EPCs em bom estado geral?"
+ "Rampas e passarelas com corrimão?"
 ];
 
 /* ================= MENU ================= */
@@ -183,9 +179,13 @@ function abrir(id){
   if(id==="nr18"){
     montarChecklist("checkNR18", checklistNR18);
   }
+
+  if(id==="historico"){
+    carregarHistorico();
+  }
 }
 
-/* ================= MOSTRAR CHECKLIST NA TELA ================= */
+/* ================= MOSTRAR CHECKLIST ================= */
 function montarChecklist(divId, lista){
   let html="";
   lista.forEach((item,i)=>{
@@ -203,7 +203,7 @@ function montarChecklist(divId, lista){
   document.getElementById(divId).innerHTML=html;
 }
 
-/* ================= TRABALHADORES + ASSINATURA ================= */
+/* ================= TRABALHADORES ================= */
 let pads=[];
 
 function carregarTrabalhadores(){
@@ -258,44 +258,49 @@ function limparCanvas(i){
   pads[i].ctx.clearRect(0,0,pads[i].canvas.width,pads[i].canvas.height);
 }
 
+/* ================= SALVAR HISTÓRICO ================= */
+function salvarChecklist(tipo){
+  let data=new Date().toLocaleString();
+
+  let registros=JSON.parse(localStorage.getItem("sst")||"[]");
+  registros.push({tipo:tipo,data:data});
+  localStorage.setItem("sst",JSON.stringify(registros));
+
+  alert("✅ Checklist "+tipo+" salvo com sucesso!");
+}
+
+/* ================= CARREGAR HISTÓRICO ================= */
+function carregarHistorico(){
+  let registros=JSON.parse(localStorage.getItem("sst")||"[]");
+  let html="";
+
+  registros.reverse().forEach(r=>{
+    html+=`<p>✅ <b>${r.tipo}</b> – ${r.data}</p><hr>`;
+  });
+
+  document.getElementById("listaHistorico").innerHTML=
+    html || "<p>Nenhum checklist salvo ainda.</p>";
+}
+
 /* ================= PDF NR35 ================= */
 function gerarPDF_NR35(){
   const { jsPDF } = window.jspdf;
-  let doc=new jsPDF("p","mm","a4");
+  let doc=new jsPDF();
 
   doc.text("NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA",14,15);
-  doc.text("Local: "+local35.value,14,25);
-  doc.text("Empresa: "+empresa35.value,14,32);
 
   let corpo=[];
   checklistNR35.forEach((item,i)=>{
     let val=document.getElementById("checkNR35_"+i).value;
-    corpo.push([item,val,"","",""]);
+    corpo.push([item,val]);
   });
 
   doc.autoTable({
-    startY:40,
-    head:[["ITEM","STATUS","SIM","NÃO","MEDIDAS"]],
+    startY:25,
+    head:[["ITEM","STATUS"]],
     body:corpo,
-    theme:"grid",
-    styles:{fontSize:8}
+    theme:"grid"
   });
-
-  let y=doc.lastAutoTable.finalY+10;
-  doc.text("TRABALHADORES AUTORIZADOS:",14,y);
-  y+=8;
-
-  for(let i=1;i<=5;i++){
-    let nome=document.getElementById("nome"+i).value;
-    let cpf=document.getElementById("cpf"+i).value;
-
-    doc.text(`${i}. ${nome} – CPF: ${cpf}`,14,y);
-
-    let img=pads[i].canvas.toDataURL("image/png");
-    doc.addImage(img,"PNG",140,y-5,50,15);
-
-    y+=18;
-  }
 
   doc.save("NR35_Oficial.pdf");
 }
@@ -303,32 +308,29 @@ function gerarPDF_NR35(){
 /* ================= PDF NR18 ================= */
 function gerarPDF_NR18(){
   const { jsPDF } = window.jspdf;
-  let doc=new jsPDF("p","mm","a4");
+  let doc=new jsPDF();
 
   doc.text("NR18 – CHECKLIST FISCALIZAÇÃO",14,15);
-  doc.text("Obra: "+obra18.value,14,25);
-  doc.text("Responsável: "+resp18.value,14,32);
 
   let corpo=[];
   checklistNR18.forEach((item,i)=>{
     let val=document.getElementById("checkNR18_"+i).value;
-    corpo.push([item,val,"","",""]);
+    corpo.push([item,val]);
   });
 
   doc.autoTable({
-    startY:40,
-    head:[["ITEM","STATUS","SIM","NÃO","OBSERVAÇÃO"]],
+    startY:25,
+    head:[["ITEM","STATUS"]],
     body:corpo,
-    theme:"grid",
-    styles:{fontSize:8}
+    theme:"grid"
   });
 
   doc.save("NR18_Oficial.pdf");
 }
 
-/* ================= WHATSAPP ================= */
+/* ================= WHATS ================= */
 function enviarWhats(tipo){
-  let msg=`${tipo} preenchida no Sistema SST – Freiberguer & Fernandes`;
+  let msg=`Checklist ${tipo} preenchido no Sistema SST – Freiberguer & Fernandes`;
   window.open("https://wa.me/5547988837699?text="+encodeURIComponent(msg));
 }
 </script>
