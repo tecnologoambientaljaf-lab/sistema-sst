@@ -40,7 +40,7 @@ section{
   border-radius:12px;
 }
 
-input{
+input,select{
   width:100%;
   padding:10px;
   border-radius:10px;
@@ -57,6 +57,13 @@ canvas{
   touch-action:none;
 }
 
+.checkItem{
+  margin:8px 0;
+  padding:8px;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+
 hr{margin:20px 0;}
 </style>
 </head>
@@ -69,7 +76,7 @@ hr{margin:20px 0;}
 <p>Padrão Fiscalização Oficial</p>
 </header>
 
-<!-- ================= MENU ================= -->
+<!-- MENU -->
 <section id="menu" style="display:block;">
 <button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
 <button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Fiscalização</button>
@@ -87,7 +94,12 @@ hr{margin:20px 0;}
 
 <hr>
 
-<h3>Trabalhadores (5) + Assinatura</h3>
+<h3>✅ Checklist NR35 (Fiscalização)</h3>
+<div id="checkNR35"></div>
+
+<hr>
+
+<h3>👷 Trabalhadores (5) + Assinatura</h3>
 <div id="listaTrabalhadores"></div>
 
 <button class="btn pdf" onclick="gerarPDF_NR35()">📄 Gerar PDF Oficial NR35</button>
@@ -107,60 +119,91 @@ hr{margin:20px 0;}
 
 <hr>
 
+<h3>✅ Checklist Completo NR18 (EPI + EPC)</h3>
+<div id="checkNR18"></div>
+
+<hr>
+
 <button class="btn pdf" onclick="gerarPDF_NR18()">📄 Gerar PDF Oficial NR18</button>
 <button class="btn whats" onclick="enviarWhats('NR18')">📲 WhatsApp Engenheiro</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
 <script>
+/* ================= CHECKLISTS ================= */
+
+const checklistNR35=[
+ "Funcionário treinado na atividade?",
+ "Exame médico ocupacional válido?",
+ "Risco de contato com energia elétrica?",
+ "Área isolada e sinalizada?",
+ "Linha de Vida instalada e inspecionada?",
+ "Cinturão paraquedista verificado?",
+ "Talabarte com absorvedor íntegro?",
+ "Trava-quedas funcionando corretamente?",
+ "Mosquetões sem deformações?",
+ "Capacete com jugular sem trincas?",
+ "Guarda-corpo e rodapé instalados?",
+ "Ancoragem validada com ART?"
+];
+
+const checklistNR18=[
+ "Capacete com jugular obrigatório?",
+ "Botas com biqueira de aço?",
+ "Luvas adequadas à atividade?",
+ "Óculos de proteção?",
+ "Protetor auricular quando aplicável?",
+ "Máscara/respirador poeira ou fumos?",
+ "Cinturão para trabalho em altura?",
+ "EPIs em bom estado de conservação?",
+ "EPIs com CA válido?",
+ "Colaboradores treinados para uso correto?",
+
+ "Guarda-corpos e rodapés instalados?",
+ "Andaimes travados, nivelados e completos?",
+ "Plataformas/bandejas de retenção instaladas?",
+ "Linhas de Vida instaladas e inspecionadas?",
+ "Proteção em aberturas de piso e lajes?",
+ "Isolamento e sinalização áreas de risco?",
+ "Painéis elétricos protegidos e aterrados?",
+ "Rampas e passarelas com corrimão?",
+ "EPCs em bom estado geral?"
+];
+
 /* ================= MENU ================= */
 function abrir(id){
   document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
   document.getElementById(id).style.display="block";
 
-  if(id==="nr35") carregarTrabalhadores();
+  if(id==="nr35"){
+    montarChecklist("checkNR35", checklistNR35);
+    carregarTrabalhadores();
+  }
+
+  if(id==="nr18"){
+    montarChecklist("checkNR18", checklistNR18);
+  }
 }
 
-/* ================= NR35 CHECKLIST ================= */
-const checklistNR35=[
- ["Funcionário treinado na atividade?"],
- ["Exame médico ocupacional válido?"],
- ["Risco de contato com energia elétrica?"],
- ["Área isolada e sinalizada?"],
- ["Linha de Vida instalada e inspecionada?"],
- ["Cinturão paraquedista em perfeito estado?"],
- ["Talabarte com absorvedor íntegro?"],
- ["Trava-quedas funcionando corretamente?"],
- ["Mosquetões sem deformações?"],
- ["Guarda-corpo e rodapé instalados?"],
- ["Ancoragem validada com ART?"]
-];
+/* ================= MOSTRAR CHECKLIST NA TELA ================= */
+function montarChecklist(divId, lista){
+  let html="";
+  lista.forEach((item,i)=>{
+    html+=`
+      <div class="checkItem">
+        ${item}
+        <select id="${divId}_${i}">
+          <option>SIM</option>
+          <option>NÃO</option>
+          <option>N/A</option>
+        </select>
+      </div>
+    `;
+  });
+  document.getElementById(divId).innerHTML=html;
+}
 
-/* ================= NR18 CHECKLIST COMPLETO ================= */
-const checklistNR18=[
- ["Capacete com jugular obrigatório?"],
- ["Botas com biqueira de aço?"],
- ["Luvas adequadas à atividade?"],
- ["Óculos de proteção?"],
- ["Protetor auricular quando aplicável?"],
- ["Máscara/respirador poeira ou fumos?"],
- ["Cinturão para trabalho em altura?"],
- ["EPIs em bom estado de conservação?"],
- ["EPIs com CA válido?"],
- ["Colaboradores treinados para uso correto?"],
-
- ["Guarda-corpos e rodapés instalados?"],
- ["Andaimes travados, nivelados e completos?"],
- ["Plataformas/bandejas de retenção instaladas?"],
- ["Linhas de Vida instaladas e inspecionadas?"],
- ["Proteção em aberturas de piso e lajes?"],
- ["Isolamento e sinalização áreas de risco?"],
- ["Painéis elétricos protegidos e aterrados?"],
- ["Rampas e passarelas com corrimão?"],
- ["EPCs em bom estado geral?"]
-];
-
-/* ================= TRABALHADORES ================= */
+/* ================= TRABALHADORES + ASSINATURA ================= */
 let pads=[];
 
 function carregarTrabalhadores(){
@@ -218,37 +261,38 @@ function limparCanvas(i){
 /* ================= PDF NR35 ================= */
 function gerarPDF_NR35(){
   const { jsPDF } = window.jspdf;
-  let doc=new jsPDF();
+  let doc=new jsPDF("p","mm","a4");
 
   doc.text("NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA",14,15);
   doc.text("Local: "+local35.value,14,25);
   doc.text("Empresa: "+empresa35.value,14,32);
 
   let corpo=[];
-  checklistNR35.forEach(item=>{
-    corpo.push([item[0],"","","",""]);
+  checklistNR35.forEach((item,i)=>{
+    let val=document.getElementById("checkNR35_"+i).value;
+    corpo.push([item,val,"","",""]);
   });
 
   doc.autoTable({
     startY:40,
-    head:[["ITEM","SIM","NÃO","N/A","MEDIDAS"]],
+    head:[["ITEM","STATUS","SIM","NÃO","MEDIDAS"]],
     body:corpo,
-    theme:"grid"
+    theme:"grid",
+    styles:{fontSize:8}
   });
 
   let y=doc.lastAutoTable.finalY+10;
-  doc.text("TRABALHADORES:",14,y);
-  y+=6;
+  doc.text("TRABALHADORES AUTORIZADOS:",14,y);
+  y+=8;
 
   for(let i=1;i<=5;i++){
-
     let nome=document.getElementById("nome"+i).value;
     let cpf=document.getElementById("cpf"+i).value;
 
     doc.text(`${i}. ${nome} – CPF: ${cpf}`,14,y);
 
     let img=pads[i].canvas.toDataURL("image/png");
-    doc.addImage(img,"PNG",140,y-4,50,15);
+    doc.addImage(img,"PNG",140,y-5,50,15);
 
     y+=18;
   }
@@ -259,28 +303,30 @@ function gerarPDF_NR35(){
 /* ================= PDF NR18 ================= */
 function gerarPDF_NR18(){
   const { jsPDF } = window.jspdf;
-  let doc=new jsPDF();
+  let doc=new jsPDF("p","mm","a4");
 
   doc.text("NR18 – CHECKLIST FISCALIZAÇÃO",14,15);
   doc.text("Obra: "+obra18.value,14,25);
   doc.text("Responsável: "+resp18.value,14,32);
 
   let corpo=[];
-  checklistNR18.forEach(item=>{
-    corpo.push([item[0],"","","",""]);
+  checklistNR18.forEach((item,i)=>{
+    let val=document.getElementById("checkNR18_"+i).value;
+    corpo.push([item,val,"","",""]);
   });
 
   doc.autoTable({
     startY:40,
-    head:[["ITEM","SIM","NÃO","N/A","OBSERVAÇÃO"]],
+    head:[["ITEM","STATUS","SIM","NÃO","OBSERVAÇÃO"]],
     body:corpo,
-    theme:"grid"
+    theme:"grid",
+    styles:{fontSize:8}
   });
 
   doc.save("NR18_Oficial.pdf");
 }
 
-/* ================= WHATS ================= */
+/* ================= WHATSAPP ================= */
 function enviarWhats(tipo){
   let msg=`${tipo} preenchida no Sistema SST – Freiberguer & Fernandes`;
   window.open("https://wa.me/5547988837699?text="+encodeURIComponent(msg));
