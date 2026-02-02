@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema SST Profissional – NR35 + NR18</title>
+<title>Sistema SST Completo – NR35 + NR18</title>
 
-<!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- AutoTable -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
 <style>
@@ -75,10 +72,10 @@ h3{color:#003366;margin-top:25px;}
 <section id="menu" style="display:block;">
 <button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
 <button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Obra</button>
-<button class="btn" onclick="abrir('historico')">📂 Histórico (PDF)</button>
+<button class="btn" onclick="abrir('historico')">📂 Histórico PDF</button>
 </section>
 
-<!-- ================= NR35 ================= -->
+<!-- NR35 -->
 <section id="nr35">
 <h2>📋 NR35 – Autorização Trabalho em Altura</h2>
 
@@ -89,20 +86,19 @@ h3{color:#003366;margin-top:25px;}
 <input id="empresa35">
 
 <hr>
-<h3>Checklist NR35 Oficial</h3>
+<h3>Checklist NR35</h3>
 <div id="listaNR35"></div>
 
 <hr>
-<h3>Trabalhadores + Assinatura (5)</h3>
+<h3>Trabalhadores + Assinaturas</h3>
 <div id="trabNR35"></div>
 
-<button class="btn save" onclick="salvarRegistro('NR35')">💾 Salvar NR35</button>
-<button class="btn pdf" onclick="gerarPDF('NR35')">📄 Gerar PDF NR35</button>
-<button class="btn whats" onclick="enviarWhats('NR35')">📲 WhatsApp Engenheiro</button>
+<button class="btn save" onclick="salvarChecklist('NR35')">💾 Salvar NR35</button>
+<button class="btn pdf" onclick="gerarPDFAtual('NR35')">📄 Gerar PDF NR35</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- ================= NR18 ================= -->
+<!-- NR18 -->
 <section id="nr18">
 <h2>🦺 NR18 – Checklist Fiscalização Obra</h2>
 
@@ -113,77 +109,60 @@ h3{color:#003366;margin-top:25px;}
 <input id="resp18">
 
 <hr>
-<h3>Checklist NR18 Completo</h3>
+<h3>Checklist NR18</h3>
 <div id="listaNR18"></div>
 
 <hr>
-<h3>Trabalhadores + Assinatura (5)</h3>
+<h3>Trabalhadores + Assinaturas</h3>
 <div id="trabNR18"></div>
 
-<button class="btn save" onclick="salvarRegistro('NR18')">💾 Salvar NR18</button>
-<button class="btn pdf" onclick="gerarPDF('NR18')">📄 Gerar PDF NR18</button>
-<button class="btn whats" onclick="enviarWhats('NR18')">📲 WhatsApp Engenheiro</button>
+<button class="btn save" onclick="salvarChecklist('NR18')">💾 Salvar NR18</button>
+<button class="btn pdf" onclick="gerarPDFAtual('NR18')">📄 Gerar PDF NR18</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
-<!-- ================= HISTÓRICO ================= -->
+<!-- HISTÓRICO -->
 <section id="historico">
-<h2>📂 Histórico de Checklists Salvos</h2>
+<h2>📂 Histórico Completo</h2>
 <div id="listaHistorico"></div>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
 <script>
-/* ================= CHECKLISTS ================= */
-
-const checklistNR35 = [
- "Funcionário treinado na atividade?",
- "Exame médico ocupacional válido?",
- "Área isolada e sinalizada?",
- "Linha de Vida instalada e inspecionada?",
-
- "=== EPIs Antes do Uso ===",
- "Cinturão Paraquedista sem rasgos ou oxidação?",
- "Talabarte com absorvedor íntegro?",
- "Trava-quedas funcionando corretamente?",
- "Mosquetões com trava automática sem deformações?",
- "Capacete com jugular sem trincas?",
+/* CHECKLISTS */
+const checklistNR35=[
+ "Funcionário treinado?",
+ "Exame médico válido?",
+ "Área isolada?",
+ "Linha de Vida instalada?",
+ "Cinturão paraquedista OK?",
+ "Talabarte íntegro?",
+ "Trava-quedas OK?",
+ "Mosquetões sem deformação?",
+ "Capacete com jugular?",
  "Calçado antiderrapante?",
-
- "=== EPCs e Área ===",
  "Ancoragem validada com ART?",
- "Guarda-corpo e rodapé fixos (1,20m)?",
- "Área abaixo isolada contra queda de objetos?",
- "Redes de proteção instaladas (se aplicável)?"
+ "Guarda-corpo e rodapé fixos?"
 ];
 
-const checklistNR18 = [
- "=== EPIs Obrigatórios ===",
- "Capacete com jugular obrigatório?",
- "Bota com biqueira de aço?",
+const checklistNR18=[
+ "Capacete obrigatório?",
+ "Bota com biqueira?",
  "Óculos de proteção?",
  "Luvas adequadas?",
- "Fardamento obrigatório?",
- "Cinto paraquedista + talabarte?",
- "Trava-quedas obrigatório?",
- "EPIs higienizados e sem desgaste?",
+ "Cinto paraquedista?",
  "EPIs com CA válido?",
- "Treinamento para uso correto?",
-
- "=== EPCs Obrigatórios ===",
- "Guarda-corpo e rodapé em periferias?",
- "Andaimes travados e nivelados?",
- "Andaime com escada e guarda-corpo?",
- "Bandejas de retenção instaladas?",
- "Sinalização e isolamento de áreas?",
- "Linha de Vida instalada e inspecionada?",
- "Painéis elétricos protegidos e aterrados?",
- "Rampas e passarelas com corrimão?"
+ "Treinamento realizado?",
+ "Guarda-corpo instalado?",
+ "Andaimes seguros?",
+ "Linha de Vida inspecionada?",
+ "Sinalização de risco?",
+ "Rampas com corrimão?"
 ];
 
 let assinaturas={};
 
-/* ================= MENU ================= */
+/* MENU */
 function abrir(id){
  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
  document.getElementById(id).style.display="block";
@@ -192,38 +171,29 @@ function abrir(id){
    montarChecklist("listaNR35",checklistNR35);
    montarTrabalhadores("trabNR35","NR35");
  }
-
  if(id==="nr18"){
    montarChecklist("listaNR18",checklistNR18);
    montarTrabalhadores("trabNR18","NR18");
  }
-
  if(id==="historico") carregarHistorico();
 }
 
-/* ================= CHECKLIST HTML ================= */
+/* MONTAR CHECKLIST */
 function montarChecklist(div,itens){
  let html="";
  itens.forEach((t,i)=>{
-
-   if(t.includes("===")){
-     html+=`<h3>${t.replaceAll("=","")}</h3>`;
-     return;
-   }
-
    html+=`
    <label>${t}
-     <select id="${div}_${i}">
-       <option>SIM</option>
-       <option>NÃO</option>
-       <option>N/A</option>
-     </select>
-   </label><br><br>`;
+   <select id="${div}_${i}">
+     <option>SIM</option>
+     <option>NÃO</option>
+     <option>N/A</option>
+   </select></label><br><br>`;
  });
  document.getElementById(div).innerHTML=html;
 }
 
-/* ================= TRABALHADORES + ASSINATURA ================= */
+/* TRABALHADORES */
 function montarTrabalhadores(div,tipo){
  let area=document.getElementById(div);
  area.innerHTML="";
@@ -231,28 +201,26 @@ function montarTrabalhadores(div,tipo){
 
  for(let i=1;i<=5;i++){
    area.innerHTML+=`
-    <h4>Trabalhador ${i}</h4>
-    <input id="${tipo}_nome${i}" placeholder="Nome completo">
-    <input id="${tipo}_cpf${i}" placeholder="CPF obrigatório">
+   <h4>Trabalhador ${i}</h4>
+   <input id="${tipo}_nome${i}" placeholder="Nome">
+   <input id="${tipo}_cpf${i}" placeholder="CPF">
 
-    <canvas id="${tipo}_canvas${i}"></canvas>
-    <button class="btn back" onclick="limparCanvas('${tipo}',${i})">
-      Limpar Assinatura
-    </button>
-    <hr>`;
+   <canvas id="${tipo}_canvas${i}"></canvas>
+   <button class="btn back" onclick="limpar('${tipo}',${i})">Limpar</button>
+   <hr>`;
  }
 
  setTimeout(()=>{
-  for(let i=1;i<=5;i++){
-    let canvas=document.getElementById(`${tipo}_canvas${i}`);
-    canvas.width=canvas.offsetWidth;
-    canvas.height=140;
-    iniciarAssinatura(tipo,i,canvas);
-  }
+   for(let i=1;i<=5;i++){
+     let canvas=document.getElementById(`${tipo}_canvas${i}`);
+     canvas.width=canvas.offsetWidth;
+     canvas.height=140;
+     assinar(tipo,i,canvas);
+   }
  },300);
 }
 
-function iniciarAssinatura(tipo,i,canvas){
+function assinar(tipo,i,canvas){
  let ctx=canvas.getContext("2d");
  let desenhando=false;
 
@@ -261,112 +229,123 @@ function iniciarAssinatura(tipo,i,canvas){
    ctx.beginPath();
    ctx.moveTo(e.offsetX,e.offsetY);
  });
-
  canvas.addEventListener("pointermove",e=>{
-   if(!desenhando) return;
+   if(!desenhando)return;
    ctx.lineTo(e.offsetX,e.offsetY);
    ctx.stroke();
  });
-
  canvas.addEventListener("pointerup",()=>desenhando=false);
 
  assinaturas[tipo][i]={canvas,ctx};
 }
 
-function limparCanvas(tipo,i){
+function limpar(tipo,i){
  assinaturas[tipo][i].ctx.clearRect(0,0,
-   assinaturas[tipo][i].canvas.width,
-   assinaturas[tipo][i].canvas.height);
+ assinaturas[tipo][i].canvas.width,
+ assinaturas[tipo][i].canvas.height);
 }
 
-/* ================= SALVAR HISTÓRICO ================= */
-function salvarRegistro(tipo){
+/* SALVAR CHECKLIST COMPLETO */
+function salvarChecklist(tipo){
+
+ let checklist=(tipo==="NR35")?checklistNR35:checklistNR18;
+ let div=(tipo==="NR35")?"listaNR35":"listaNR18";
+
+ let respostas=[];
+
+ checklist.forEach((t,i)=>{
+   respostas.push(document.getElementById(`${div}_${i}`).value);
+ });
+
+ let trabalhadores=[];
+ for(let i=1;i<=5;i++){
+   trabalhadores.push({
+     nome:document.getElementById(`${tipo}_nome${i}`).value,
+     cpf:document.getElementById(`${tipo}_cpf${i}`).value,
+     assinatura:assinaturas[tipo][i].canvas.toDataURL()
+   });
+ }
+
  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
- dados.push({tipo:tipo,data:new Date().toLocaleString()});
+
+ dados.push({
+   tipo:tipo,
+   data:new Date().toLocaleString(),
+   respostas:respostas,
+   trabalhadores:trabalhadores
+ });
+
  localStorage.setItem("sst",JSON.stringify(dados));
- alert("✅ Registro salvo com sucesso!");
+ alert("✅ Checklist salvo no histórico!");
 }
 
-/* ================= HISTÓRICO ================= */
+/* HISTÓRICO */
 function carregarHistorico(){
  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
  let html="";
- dados.forEach((r,i)=>{
+
+ dados.forEach((r,index)=>{
    html+=`
-   <p>📌 ${r.tipo} – ${r.data}</p>
-   <button class="btn pdf" onclick="gerarPDF('${r.tipo}')">
-     📄 Gerar PDF novamente
+   <p><b>${r.tipo}</b> – ${r.data}</p>
+   <button class="btn pdf" onclick="gerarPDFHistorico(${index})">
+     📄 Abrir PDF Salvo
    </button>
    <hr>`;
  });
+
  document.getElementById("listaHistorico").innerHTML=
-   html||"Nenhum registro salvo.";
+   html||"Nenhum checklist salvo.";
 }
 
-/* ================= GERAR PDF COM X ================= */
-function gerarPDF(tipo){
+/* GERAR PDF DO HISTÓRICO */
+function gerarPDFHistorico(index){
+
+ let dados=JSON.parse(localStorage.getItem("sst"));
+ let registro=dados[index];
 
  const { jsPDF } = window.jspdf;
- let doc=new jsPDF("p","mm","a4");
-
- let titulo=(tipo==="NR35")
-  ?"NR35 – AUTORIZAÇÃO TRABALHO EM ALTURA"
-  :"NR18 – CHECKLIST FISCALIZAÇÃO OBRA";
+ let doc=new jsPDF();
 
  doc.setFontSize(14);
- doc.text(titulo,14,15);
-
- let checklist=(tipo==="NR35")?checklistNR35:checklistNR18;
- let divChecklist=(tipo==="NR35")?"listaNR35":"listaNR18";
+ doc.text(registro.tipo+" – CHECKLIST OFICIAL",14,15);
 
  let corpo=[];
+ let checklist=(registro.tipo==="NR35")?checklistNR35:checklistNR18;
 
  checklist.forEach((item,i)=>{
-
-   if(item.includes("===")) return;
-
-   let resposta=document.getElementById(`${divChecklist}_${i}`).value;
-
-   let sim = (resposta==="SIM") ? "X" : "";
-   let nao = (resposta==="NÃO") ? "X" : "";
-   let na  = (resposta==="N/A") ? "X" : "";
-
-   corpo.push([item, sim, nao, na, ""]);
+   let resp=registro.respostas[i];
+   corpo.push([
+     item,
+     resp==="SIM"?"X":"",
+     resp==="NÃO"?"X":"",
+     resp==="N/A"?"X":"",
+     ""
+   ]);
  });
 
  doc.autoTable({
    startY:25,
-   head:[["ITEM","SIM","NÃO","N/A","OBSERVAÇÃO"]],
+   head:[["ITEM","SIM","NÃO","N/A","OBS"]],
    body:corpo,
-   theme:"grid",
-   styles:{fontSize:9},
-   headStyles:{fillColor:[0,150,120]}
+   theme:"grid"
  });
 
  let y=doc.lastAutoTable.finalY+10;
  doc.text("TRABALHADORES:",14,y);
 
  y+=8;
- for(let i=1;i<=5;i++){
-
-   let nome=document.getElementById(`${tipo}_nome${i}`).value;
-   let cpf=document.getElementById(`${tipo}_cpf${i}`).value;
-
-   doc.text(`${i}. ${nome} – CPF: ${cpf}`,14,y);
-
-   let img=assinaturas[tipo][i].canvas.toDataURL("image/png");
-   doc.addImage(img,"PNG",140,y-5,50,15);
-
+ registro.trabalhadores.forEach((t,i)=>{
+   doc.text(`${i+1}. ${t.nome} CPF:${t.cpf}`,14,y);
+   doc.addImage(t.assinatura,"PNG",140,y-5,50,15);
    y+=18;
- }
+ });
 
- doc.save(tipo+"_Fiscalizacao.pdf");
+ doc.output("dataurlnewwindow"); 
 }
 
-/* ================= WHATSAPP ================= */
-function enviarWhats(tipo){
- let msg=`${tipo} preenchida no Sistema SST – Freiberguer & Fernandes`;
- window.open("https://wa.me/5547988837699?text="+encodeURIComponent(msg));
+/* PDF ATUAL */
+function gerarPDFAtual(tipo){
+ alert("Use SALVAR primeiro para gerar PDF completo via histórico.");
 }
 </script>
 
