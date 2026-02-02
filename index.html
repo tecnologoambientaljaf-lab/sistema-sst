@@ -41,7 +41,7 @@ section{
   border-radius:12px;
 }
 
-input{
+input,select{
   width:100%;
   padding:10px;
   border-radius:10px;
@@ -59,6 +59,7 @@ canvas{
 }
 
 hr{margin:20px 0;}
+h3{color:#003366;margin-top:25px;}
 </style>
 </head>
 
@@ -67,14 +68,14 @@ hr{margin:20px 0;}
 <header>
 <h1>Sistema SST Profissional</h1>
 <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
-<p>Padrão Fiscalização Oficial</p>
+<p>NR35 + NR18 – Fiscalização Oficial</p>
 </header>
 
 <!-- MENU -->
 <section id="menu" style="display:block;">
 <button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
 <button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Obra</button>
-<button class="btn" onclick="abrir('historico')">📂 Histórico PDF</button>
+<button class="btn" onclick="abrir('historico')">📂 Histórico (PDF)</button>
 </section>
 
 <!-- ================= NR35 ================= -->
@@ -88,14 +89,12 @@ hr{margin:20px 0;}
 <input id="empresa35">
 
 <hr>
-
-<h3>Checklist Oficial NR35</h3>
+<h3>Checklist NR35 Oficial</h3>
 <div id="listaNR35"></div>
 
 <hr>
-
-<h3>Trabalhadores + Assinaturas (5)</h3>
-<div id="trabalhadores35"></div>
+<h3>Trabalhadores + Assinatura (5)</h3>
+<div id="trabNR35"></div>
 
 <button class="btn save" onclick="salvarRegistro('NR35')">💾 Salvar NR35</button>
 <button class="btn pdf" onclick="gerarPDF('NR35')">📄 Gerar PDF NR35</button>
@@ -114,14 +113,12 @@ hr{margin:20px 0;}
 <input id="resp18">
 
 <hr>
-
-<h3>Checklist Completo NR18</h3>
+<h3>Checklist NR18 Completo</h3>
 <div id="listaNR18"></div>
 
 <hr>
-
-<h3>Trabalhadores + Assinaturas (5)</h3>
-<div id="trabalhadores18"></div>
+<h3>Trabalhadores + Assinatura (5)</h3>
+<div id="trabNR18"></div>
 
 <button class="btn save" onclick="salvarRegistro('NR18')">💾 Salvar NR18</button>
 <button class="btn pdf" onclick="gerarPDF('NR18')">📄 Gerar PDF NR18</button>
@@ -131,42 +128,57 @@ hr{margin:20px 0;}
 
 <!-- ================= HISTÓRICO ================= -->
 <section id="historico">
-<h2>📂 Histórico de Registros</h2>
+<h2>📂 Histórico de Checklists</h2>
 <div id="listaHistorico"></div>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
 <script>
 /* ================= CHECKLISTS ================= */
-const checklistNR35=[
+
+const checklistNR35 = [
  "Funcionário treinado na atividade?",
  "Exame médico ocupacional válido?",
  "Área isolada e sinalizada?",
  "Linha de Vida instalada e inspecionada?",
- "Cinturão paraquedista em perfeito estado?",
+
+ "=== EPIs Antes do Uso ===",
+ "Cinturão Paraquedista sem rasgos ou oxidação?",
  "Talabarte com absorvedor íntegro?",
  "Trava-quedas funcionando corretamente?",
- "Mosquetões sem deformações?",
- "Guarda-corpo e rodapé instalados?",
- "Ancoragem validada com ART?"
+ "Mosquetões com trava automática sem deformações?",
+ "Capacete com jugular sem trincas?",
+ "Calçado antiderrapante?",
+
+ "=== EPCs e Área ===",
+ "Ancoragem validada com ART?",
+ "Guarda-corpo e rodapé fixos (1,20m)?",
+ "Área abaixo isolada contra queda de objetos?",
+ "Redes de proteção instaladas (se aplicável)?"
 ];
 
-const checklistNR18=[
+const checklistNR18 = [
+ "=== EPIs Obrigatórios ===",
  "Capacete com jugular obrigatório?",
- "Botas com biqueira de aço?",
- "Luvas adequadas?",
+ "Bota com biqueira de aço?",
  "Óculos de proteção?",
- "Protetor auricular quando aplicável?",
- "Máscara/respirador quando necessário?",
- "EPIs em bom estado e higienizados?",
+ "Luvas adequadas?",
+ "Fardamento obrigatório?",
+ "Cinto paraquedista + talabarte?",
+ "Trava-quedas obrigatório?",
+ "EPIs higienizados e sem desgaste?",
  "EPIs com CA válido?",
- "Guarda-corpos e rodapés instalados?",
+ "Treinamento para uso correto?",
+
+ "=== EPCs Obrigatórios ===",
+ "Guarda-corpo e rodapé em periferias?",
  "Andaimes travados e nivelados?",
+ "Andaime com escada e guarda-corpo?",
  "Bandejas de retenção instaladas?",
- "Linhas de Vida instaladas?",
- "Painéis elétricos protegidos?",
- "Rampas e acessos com corrimão?",
- "Sinalização de risco visível?"
+ "Sinalização e isolamento de áreas?",
+ "Linha de Vida instalada e inspecionada?",
+ "Painéis elétricos protegidos e aterrados?",
+ "Rampas e passarelas com corrimão?"
 ];
 
 let assinaturas={};
@@ -178,12 +190,12 @@ function abrir(id){
 
  if(id==="nr35"){
    montarChecklist("listaNR35",checklistNR35);
-   montarTrabalhadores("trabalhadores35","NR35");
+   montarTrabalhadores("trabNR35","NR35");
  }
 
  if(id==="nr18"){
    montarChecklist("listaNR18",checklistNR18);
-   montarTrabalhadores("trabalhadores18","NR18");
+   montarTrabalhadores("trabNR18","NR18");
  }
 
  if(id==="historico") carregarHistorico();
@@ -193,14 +205,20 @@ function abrir(id){
 function montarChecklist(div,itens){
  let html="";
  itens.forEach((t,i)=>{
+
+   if(t.includes("===")){
+     html+=`<h3>${t.replaceAll("=","")}</h3>`;
+     return;
+   }
+
    html+=`
-    <label>${t}
+   <label>${t}
      <select id="${div}_${i}">
        <option>SIM</option>
        <option>NÃO</option>
        <option>N/A</option>
      </select>
-    </label><br><br>`;
+   </label><br><br>`;
  });
  document.getElementById(div).innerHTML=html;
 }
@@ -216,8 +234,11 @@ function montarTrabalhadores(div,tipo){
     <h4>Trabalhador ${i}</h4>
     <input id="${tipo}_nome${i}" placeholder="Nome completo">
     <input id="${tipo}_cpf${i}" placeholder="CPF obrigatório">
+
     <canvas id="${tipo}_canvas${i}"></canvas>
-    <button class="btn back" onclick="limparCanvas('${tipo}',${i})">Limpar Assinatura</button>
+    <button class="btn back" onclick="limparCanvas('${tipo}',${i})">
+      Limpar Assinatura
+    </button>
     <hr>`;
  }
 
@@ -271,9 +292,15 @@ function carregarHistorico(){
  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
  let html="";
  dados.forEach((r,i)=>{
-   html+=`<p>📌 ${r.tipo} – ${r.data}</p><hr>`;
+   html+=`
+   <p>📌 ${r.tipo} – ${r.data}</p>
+   <button class="btn pdf" onclick="gerarPDF('${r.tipo}')">
+     📄 Gerar PDF novamente
+   </button>
+   <hr>`;
  });
- document.getElementById("listaHistorico").innerHTML=html||"Nenhum registro salvo.";
+ document.getElementById("listaHistorico").innerHTML=
+   html||"Nenhum registro salvo.";
 }
 
 /* ================= GERAR PDF ================= */
@@ -290,7 +317,11 @@ function gerarPDF(tipo){
 
  let checklist=(tipo==="NR35")?checklistNR35:checklistNR18;
  let corpo=[];
- checklist.forEach(item=>corpo.push([item,"","","",""]));
+
+ checklist.forEach(item=>{
+   if(item.includes("===")) return;
+   corpo.push([item,"","","",""]);
+ });
 
  doc.autoTable({
    startY:25,
@@ -301,7 +332,7 @@ function gerarPDF(tipo){
  });
 
  let y=doc.lastAutoTable.finalY+10;
- doc.text("TRABALHADORES AUTORIZADOS:",14,y);
+ doc.text("TRABALHADORES:",14,y);
 
  y+=8;
  for(let i=1;i<=5;i++){
@@ -316,7 +347,7 @@ function gerarPDF(tipo){
    y+=18;
  }
 
- doc.save(tipo+"_Oficial.pdf");
+ doc.save(tipo+"_Fiscalizacao.pdf");
 }
 
 /* ================= WHATSAPP ================= */
