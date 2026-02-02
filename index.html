@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema SST Completo – NR35 + NR18</title>
+<title>Sistema SST Profissional – NR35 + NR18</title>
 
 <!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -66,7 +66,7 @@ h3{color:#003366;margin-top:25px;}
 <body>
 
 <header>
-<h1>Sistema SST Profissional</h1>
+<h1>SISTEMA SST PROFISSIONAL</h1>
 <p><b>FREIBERGER & FERNANDES – Engenharia</b></p>
 <p>NR35 + NR18 – Fiscalização Oficial</p>
 </header>
@@ -128,7 +128,7 @@ h3{color:#003366;margin-top:25px;}
 
 <!-- ================= HISTÓRICO ================= -->
 <section id="historico">
-<h2>📂 Histórico de Checklists</h2>
+<h2>📂 Histórico de Checklists Salvos</h2>
 <div id="listaHistorico"></div>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
@@ -303,8 +303,9 @@ function carregarHistorico(){
    html||"Nenhum registro salvo.";
 }
 
-/* ================= GERAR PDF ================= */
+/* ================= GERAR PDF COM X ================= */
 function gerarPDF(tipo){
+
  const { jsPDF } = window.jspdf;
  let doc=new jsPDF("p","mm","a4");
 
@@ -316,11 +317,21 @@ function gerarPDF(tipo){
  doc.text(titulo,14,15);
 
  let checklist=(tipo==="NR35")?checklistNR35:checklistNR18;
+ let divChecklist=(tipo==="NR35")?"listaNR35":"listaNR18";
+
  let corpo=[];
 
- checklist.forEach(item=>{
+ checklist.forEach((item,i)=>{
+
    if(item.includes("===")) return;
-   corpo.push([item,"","","",""]);
+
+   let resposta=document.getElementById(`${divChecklist}_${i}`).value;
+
+   let sim = (resposta==="SIM") ? "X" : "";
+   let nao = (resposta==="NÃO") ? "X" : "";
+   let na  = (resposta==="N/A") ? "X" : "";
+
+   corpo.push([item, sim, nao, na, ""]);
  });
 
  doc.autoTable({
@@ -328,7 +339,8 @@ function gerarPDF(tipo){
    head:[["ITEM","SIM","NÃO","N/A","OBSERVAÇÃO"]],
    body:corpo,
    theme:"grid",
-   styles:{fontSize:9}
+   styles:{fontSize:9},
+   headStyles:{fillColor:[0,150,120]}
  });
 
  let y=doc.lastAutoTable.finalY+10;
@@ -336,6 +348,7 @@ function gerarPDF(tipo){
 
  y+=8;
  for(let i=1;i<=5;i++){
+
    let nome=document.getElementById(`${tipo}_nome${i}`).value;
    let cpf=document.getElementById(`${tipo}_cpf${i}`).value;
 
