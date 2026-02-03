@@ -97,7 +97,6 @@ h3{color:#003366;margin-top:25px;}
 <div id="trabNR35"></div>
 
 <button class="btn save" onclick="salvarChecklist('NR35')">💾 Salvar NR35</button>
-<button class="btn pdf" onclick="gerarPDFAtual('NR35')">📄 Gerar PDF NR35</button>
 <button class="btn whats" onclick="enviarWhats('NR35')">📲 WhatsApp Engenheiro</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
@@ -121,7 +120,6 @@ h3{color:#003366;margin-top:25px;}
 <div id="trabNR18"></div>
 
 <button class="btn save" onclick="salvarChecklist('NR18')">💾 Salvar NR18</button>
-<button class="btn pdf" onclick="gerarPDFAtual('NR18')">📄 Gerar PDF NR18</button>
 <button class="btn whats" onclick="enviarWhats('NR18')">📲 WhatsApp Engenheiro</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
@@ -141,14 +139,12 @@ const checklistNR35=[
  "Exame médico ocupacional válido?",
  "Área isolada e sinalizada?",
  "Linha de Vida instalada e inspecionada?",
-
  "Cinturão Paraquedista sem rasgos ou oxidação?",
  "Talabarte com absorvedor íntegro?",
  "Trava-quedas funcionando corretamente?",
  "Mosquetões com trava automática sem deformações?",
  "Capacete com jugular sem trincas?",
  "Calçado antiderrapante?",
-
  "Ancoragem validada com ART?",
  "Guarda-corpo e rodapé fixos (1,20m)?",
  "Área abaixo isolada contra queda de objetos?",
@@ -166,7 +162,6 @@ const checklistNR18=[
  "EPIs higienizados e sem desgaste?",
  "EPIs com CA válido?",
  "Treinamento para uso correto?",
-
  "Guarda-corpo e rodapé em periferias?",
  "Andaimes travados e nivelados?",
  "Andaime com escada e guarda-corpo?",
@@ -315,7 +310,7 @@ function carregarHistorico(){
    html||"Nenhum checklist salvo.";
 }
 
-/* ================= GERAR PDF HISTÓRICO ================= */
+/* ================= PDF HISTÓRICO ================= */
 function gerarPDFHistorico(index){
 
  let dados=JSON.parse(localStorage.getItem("sst"));
@@ -331,13 +326,18 @@ function gerarPDFHistorico(index){
 
  let corpo=[];
  checklist.forEach((item,i)=>{
-   let resp=registro.respostas[i];
+
+   let resp = registro.respostas[i]
+     .trim()
+     .toUpperCase()
+     .normalize("NFD")
+     .replace(/[\u0300-\u036f]/g,"");
 
    corpo.push([
      item,
-     resp==="SIM"?"X":"",
-     resp==="NÃO"?"X":"",
-     resp==="N/A"?"X":"",
+     resp==="SIM" ? "X" : "",
+     resp==="NAO" ? "X" : "",
+     resp==="N/A" ? "X" : "",
      ""
    ]);
  });
@@ -360,12 +360,7 @@ function gerarPDFHistorico(index){
    y+=18;
  });
 
- doc.save(registro.tipo+"_Fiscalizacao.pdf");
-}
-
-/* PDF ATUAL */
-function gerarPDFAtual(tipo){
- alert("⚠️ Primeiro clique em SALVAR para gerar PDF completo no Histórico.");
+ doc.output("dataurlnewwindow");
 }
 
 /* ================= WHATSAPP ================= */
