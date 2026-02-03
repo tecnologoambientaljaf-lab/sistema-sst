@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema SST Completo – NR35 + NR18</title>
+<title>Sistema SST Profissional – NR35 + NR18</title>
 
+<!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- AutoTable -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
 <style>
@@ -72,7 +75,7 @@ h3{color:#003366;margin-top:25px;}
 <section id="menu" style="display:block;">
 <button class="btn" onclick="abrir('nr35')">📋 NR35 – Trabalho em Altura</button>
 <button class="btn" onclick="abrir('nr18')">🦺 NR18 – Checklist Obra</button>
-<button class="btn" onclick="abrir('historico')">📂 Histórico PDF</button>
+<button class="btn" onclick="abrir('historico')">📂 Histórico (PDF)</button>
 </section>
 
 <!-- NR35 -->
@@ -86,15 +89,16 @@ h3{color:#003366;margin-top:25px;}
 <input id="empresa35">
 
 <hr>
-<h3>Checklist NR35</h3>
+<h3>Checklist NR35 Oficial</h3>
 <div id="listaNR35"></div>
 
 <hr>
-<h3>Trabalhadores + Assinaturas</h3>
+<h3>Trabalhadores + Assinaturas (5)</h3>
 <div id="trabNR35"></div>
 
 <button class="btn save" onclick="salvarChecklist('NR35')">💾 Salvar NR35</button>
 <button class="btn pdf" onclick="gerarPDFAtual('NR35')">📄 Gerar PDF NR35</button>
+<button class="btn whats" onclick="enviarWhats('NR35')">📲 WhatsApp Engenheiro</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
@@ -109,15 +113,16 @@ h3{color:#003366;margin-top:25px;}
 <input id="resp18">
 
 <hr>
-<h3>Checklist NR18</h3>
+<h3>Checklist NR18 Completo</h3>
 <div id="listaNR18"></div>
 
 <hr>
-<h3>Trabalhadores + Assinaturas</h3>
+<h3>Trabalhadores + Assinaturas (5)</h3>
 <div id="trabNR18"></div>
 
 <button class="btn save" onclick="salvarChecklist('NR18')">💾 Salvar NR18</button>
 <button class="btn pdf" onclick="gerarPDFAtual('NR18')">📄 Gerar PDF NR18</button>
+<button class="btn whats" onclick="enviarWhats('NR18')">📲 WhatsApp Engenheiro</button>
 <button class="btn back" onclick="abrir('menu')">⬅ Voltar</button>
 </section>
 
@@ -129,40 +134,52 @@ h3{color:#003366;margin-top:25px;}
 </section>
 
 <script>
-/* CHECKLISTS */
+/* ================= CHECKLISTS ================= */
+
 const checklistNR35=[
- "Funcionário treinado?",
- "Exame médico válido?",
- "Área isolada?",
- "Linha de Vida instalada?",
- "Cinturão paraquedista OK?",
- "Talabarte íntegro?",
- "Trava-quedas OK?",
- "Mosquetões sem deformação?",
- "Capacete com jugular?",
+ "Funcionário treinado na atividade?",
+ "Exame médico ocupacional válido?",
+ "Área isolada e sinalizada?",
+ "Linha de Vida instalada e inspecionada?",
+
+ "Cinturão Paraquedista sem rasgos ou oxidação?",
+ "Talabarte com absorvedor íntegro?",
+ "Trava-quedas funcionando corretamente?",
+ "Mosquetões com trava automática sem deformações?",
+ "Capacete com jugular sem trincas?",
  "Calçado antiderrapante?",
+
  "Ancoragem validada com ART?",
- "Guarda-corpo e rodapé fixos?"
+ "Guarda-corpo e rodapé fixos (1,20m)?",
+ "Área abaixo isolada contra queda de objetos?",
+ "Redes de proteção instaladas (se aplicável)?"
 ];
 
 const checklistNR18=[
- "Capacete obrigatório?",
- "Bota com biqueira?",
+ "Capacete com jugular obrigatório?",
+ "Bota com biqueira de aço?",
  "Óculos de proteção?",
  "Luvas adequadas?",
- "Cinto paraquedista?",
+ "Fardamento obrigatório?",
+ "Cinto paraquedista + talabarte?",
+ "Trava-quedas obrigatório?",
+ "EPIs higienizados e sem desgaste?",
  "EPIs com CA válido?",
- "Treinamento realizado?",
- "Guarda-corpo instalado?",
- "Andaimes seguros?",
- "Linha de Vida inspecionada?",
- "Sinalização de risco?",
- "Rampas com corrimão?"
+ "Treinamento para uso correto?",
+
+ "Guarda-corpo e rodapé em periferias?",
+ "Andaimes travados e nivelados?",
+ "Andaime com escada e guarda-corpo?",
+ "Bandejas de retenção instaladas?",
+ "Sinalização e isolamento de áreas?",
+ "Linha de Vida instalada e inspecionada?",
+ "Painéis elétricos protegidos e aterrados?",
+ "Rampas e passarelas com corrimão?"
 ];
 
 let assinaturas={};
 
-/* MENU */
+/* ================= MENU ================= */
 function abrir(id){
  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
  document.getElementById(id).style.display="block";
@@ -178,7 +195,7 @@ function abrir(id){
  if(id==="historico") carregarHistorico();
 }
 
-/* MONTAR CHECKLIST */
+/* ================= CHECKLIST HTML ================= */
 function montarChecklist(div,itens){
  let html="";
  itens.forEach((t,i)=>{
@@ -193,7 +210,7 @@ function montarChecklist(div,itens){
  document.getElementById(div).innerHTML=html;
 }
 
-/* TRABALHADORES */
+/* ================= TRABALHADORES ================= */
 function montarTrabalhadores(div,tipo){
  let area=document.getElementById(div);
  area.innerHTML="";
@@ -202,11 +219,11 @@ function montarTrabalhadores(div,tipo){
  for(let i=1;i<=5;i++){
    area.innerHTML+=`
    <h4>Trabalhador ${i}</h4>
-   <input id="${tipo}_nome${i}" placeholder="Nome">
-   <input id="${tipo}_cpf${i}" placeholder="CPF">
+   <input id="${tipo}_nome${i}" placeholder="Nome completo">
+   <input id="${tipo}_cpf${i}" placeholder="CPF obrigatório">
 
    <canvas id="${tipo}_canvas${i}"></canvas>
-   <button class="btn back" onclick="limpar('${tipo}',${i})">Limpar</button>
+   <button class="btn back" onclick="limpar('${tipo}',${i})">Limpar Assinatura</button>
    <hr>`;
  }
 
@@ -229,11 +246,13 @@ function assinar(tipo,i,canvas){
    ctx.beginPath();
    ctx.moveTo(e.offsetX,e.offsetY);
  });
+
  canvas.addEventListener("pointermove",e=>{
    if(!desenhando)return;
    ctx.lineTo(e.offsetX,e.offsetY);
    ctx.stroke();
  });
+
  canvas.addEventListener("pointerup",()=>desenhando=false);
 
  assinaturas[tipo][i]={canvas,ctx};
@@ -245,14 +264,13 @@ function limpar(tipo,i){
  assinaturas[tipo][i].canvas.height);
 }
 
-/* SALVAR CHECKLIST COMPLETO */
+/* ================= SALVAR HISTÓRICO ================= */
 function salvarChecklist(tipo){
 
  let checklist=(tipo==="NR35")?checklistNR35:checklistNR18;
  let div=(tipo==="NR35")?"listaNR35":"listaNR18";
 
  let respostas=[];
-
  checklist.forEach((t,i)=>{
    respostas.push(document.getElementById(`${div}_${i}`).value);
  });
@@ -279,7 +297,7 @@ function salvarChecklist(tipo){
  alert("✅ Checklist salvo no histórico!");
 }
 
-/* HISTÓRICO */
+/* ================= HISTÓRICO ================= */
 function carregarHistorico(){
  let dados=JSON.parse(localStorage.getItem("sst")||"[]");
  let html="";
@@ -297,23 +315,24 @@ function carregarHistorico(){
    html||"Nenhum checklist salvo.";
 }
 
-/* GERAR PDF DO HISTÓRICO */
+/* ================= GERAR PDF HISTÓRICO ================= */
 function gerarPDFHistorico(index){
 
  let dados=JSON.parse(localStorage.getItem("sst"));
  let registro=dados[index];
 
  const { jsPDF } = window.jspdf;
- let doc=new jsPDF();
+ let doc=new jsPDF("p","mm","a4");
 
  doc.setFontSize(14);
  doc.text(registro.tipo+" – CHECKLIST OFICIAL",14,15);
 
- let corpo=[];
  let checklist=(registro.tipo==="NR35")?checklistNR35:checklistNR18;
 
+ let corpo=[];
  checklist.forEach((item,i)=>{
    let resp=registro.respostas[i];
+
    corpo.push([
      item,
      resp==="SIM"?"X":"",
@@ -327,7 +346,8 @@ function gerarPDFHistorico(index){
    startY:25,
    head:[["ITEM","SIM","NÃO","N/A","OBS"]],
    body:corpo,
-   theme:"grid"
+   theme:"grid",
+   styles:{fontSize:9}
  });
 
  let y=doc.lastAutoTable.finalY+10;
@@ -340,12 +360,18 @@ function gerarPDFHistorico(index){
    y+=18;
  });
 
- doc.output("dataurlnewwindow"); 
+ doc.save(registro.tipo+"_Fiscalizacao.pdf");
 }
 
 /* PDF ATUAL */
 function gerarPDFAtual(tipo){
- alert("Use SALVAR primeiro para gerar PDF completo via histórico.");
+ alert("⚠️ Primeiro clique em SALVAR para gerar PDF completo no Histórico.");
+}
+
+/* ================= WHATSAPP ================= */
+function enviarWhats(tipo){
+ let msg=`${tipo} preenchida no Sistema SST – Freiberguer & Fernandes`;
+ window.open("https://wa.me/5547988837699?text="+encodeURIComponent(msg));
 }
 </script>
 
